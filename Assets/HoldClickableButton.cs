@@ -13,15 +13,9 @@ public class HoldClickableButton : MonoBehaviour, IPointerDownHandler, IPointerU
     private bool _isHoldingButton;
     private float _elapsedTime;
 
+    private void Update() => ManageButtonInteraction();
+    
     public void OnPointerDown(PointerEventData eventData) => ToggleHoldingButton(true);
-
-    private void ToggleHoldingButton(bool isPointerDown)
-    {
-        _isHoldingButton = isPointerDown;
-
-        if (isPointerDown)
-            _elapsedTime = 0;
-    }
 
     public void OnPointerUp(PointerEventData eventData)
     {
@@ -29,6 +23,14 @@ public class HoldClickableButton : MonoBehaviour, IPointerDownHandler, IPointerU
         ToggleHoldingButton(false);
         
         OnClickUp?.Invoke();
+    }
+    
+    private void ToggleHoldingButton(bool isPointerDown)
+    {
+        _isHoldingButton = isPointerDown;
+
+        if (isPointerDown)
+            _elapsedTime = 0;
     }
 
     private void ManageButtonInteraction(bool isPointerUp = false)
@@ -59,6 +61,4 @@ public class HoldClickableButton : MonoBehaviour, IPointerDownHandler, IPointerU
         ToggleHoldingButton(false);
         OnHoldClicked?.Invoke();
     }
-
-    private void Update() => ManageButtonInteraction();
 }

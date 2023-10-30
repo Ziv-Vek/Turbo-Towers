@@ -5,10 +5,14 @@ using UnityEngine.EventSystems;
 public class HoldClickableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private float _holdDuration;
+    
+    #region EVENTS
 
     public event Action OnClicked;
     public event Action OnHoldClicked;
     public event Action OnClickUp; 
+
+    #endregion
 
     private bool _isHoldingButton;
     private float _elapsedTime;

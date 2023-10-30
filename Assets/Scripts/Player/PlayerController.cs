@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -28,10 +27,8 @@ public class PlayerController : MonoBehaviour
   
     #region EVENTS
 
-    public static event Action onTouchDragUp;
-    public static event Action onTouchDragDown;
-    public static event Action onTouchDragRight;
-    public static event Action onTouchDragLeft;
+    public static event Action<int> onVerticalTouchDrag;
+    public static event Action<int> onHorizontalTouchDrag;
     // public static event Action<Vector2> onTouchStarted;
     // public static event Action<Vector2> onTouchPerformed; 
     // public static event Action onTouchEnded;
@@ -89,37 +86,37 @@ public class PlayerController : MonoBehaviour
                  //onTouchPerformed?.Invoke(currentTouchPos);
                 angle = Mathf.Atan2(currentTouchPos.y - startPos.y, currentTouchPos.x - startPos.x) * 180 / Mathf.PI;
 
-                HandlePowerupActionByTouchAngle(angle);
-                HandelRotationActionByTouchAngle(angle);
+                HandleVerticalDragActionByTouchAngle(angle);
+                HandelHorizontalActionByTouchAngle(angle);
              }
              yield return null;
          }
     }
 
-    private void HandlePowerupActionByTouchAngle(float angle)
+    private void HandleVerticalDragActionByTouchAngle(float angle)
     {
-        // Powerup:
+        // Vertical drag up:
         if (angle >= minAngleToPowerup && angle <= (180 - minAngleToPowerup))
         {
-            onTouchDragUp?.Invoke();
+            onVerticalTouchDrag?.Invoke(1);
         }
-        // Powerdown:
+        // Vertical drag down:
         else if (angle <= -minAngleToPowerup && angle >= (-180 + minAngleToPowerup))
         {
-            onTouchDragDown?.Invoke();
+            onVerticalTouchDrag?.Invoke(-1);
         }
     }
-    private void HandelRotationActionByTouchAngle(float angle)
+    private void HandelHorizontalActionByTouchAngle(float angle)
     {
-        // Rotate right:
+        // Horizontal drag right:
         if (Mathf.Abs(angle) <= maxAngleToRotate)
         {
-            onTouchDragRight?.Invoke();
+            onHorizontalTouchDrag?.Invoke(1);
         } 
-        // Rotate left:
+        // Horizontal drag left:
         else if (Mathf.Abs(angle) >= (180 - maxAngleToRotate))
         {
-            onTouchDragLeft?.Invoke();
+            onHorizontalTouchDrag?.Invoke(-1);
         }
     }
 }

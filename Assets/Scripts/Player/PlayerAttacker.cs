@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerAttacker : MonoBehaviour
@@ -12,10 +13,12 @@ public class PlayerAttacker : MonoBehaviour
      [SerializeField] private float powerupSpeed = 0.1f;
      [SerializeField] private float powerdownSpeed = 0.3f;
      [SerializeField] private Transform turretExit;
-     
+     [SerializeField] private Projectile projectile;
+     [SerializeField] private TrajectoryLine trajectoryLine;
 
      private bool isPoweringUp = false;
      private bool isAvailableToFire = true;
+     private Scene testScene;
 
      private void OnEnable()
      {
@@ -35,6 +38,7 @@ public class PlayerAttacker : MonoBehaviour
      
      private void Start()
      {
+          testScene = SceneManager.CreateScene("TestScene");
           powerSlider.maxValue = powerBtn.HoldDuration;
      }
 
@@ -57,6 +61,7 @@ public class PlayerAttacker : MonoBehaviour
                return;
           
           powerSlider.value += Time.deltaTime;
+          trajectoryLine.ShowTrajectoryLine(turretExit.position, turretExit.up * (powerSlider.value / powerSlider.maxValue) * projectile.FirePowerMultiplier);
           if (powerSlider.value >= powerSlider.maxValue)
                Fire();
      }
@@ -67,6 +72,7 @@ public class PlayerAttacker : MonoBehaviour
           {
                isPoweringUp = false;
                powerSlider.value = 0;
+               return;
           };
           
           Fire();
@@ -79,11 +85,14 @@ public class PlayerAttacker : MonoBehaviour
 
      private void Fire()
      {
-          powerSlider.value = 0;
           isPoweringUp = false;
-          Debug.Log("Fire projectile!");
+
+          var projectile =
+               Instantiate(this.projectile, turretExit.transform.position, Quaternion.identity);
           
-          
+          Debug.DrawRay(projectile.transform.position, turretExit.up * 100f, Color.red, 2f, false);
+          projectile.Fire(turretExit.up, powerSlider.value / powerSlider.maxValue);
+          powerSlider.value = 0;
      }
      
 }

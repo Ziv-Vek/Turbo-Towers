@@ -16,7 +16,7 @@ public class PlayerRotator : MonoBehaviour
         PlayerController.onHorizontalTouchDrag += HorizontalTouchDragHandler;
         PlayerController.onVerticalTouchDrag += VerticalTouchDragHandler;
 
-        InputSwitchHandler.Instance.onInputStyleSelect += inputStyle => this.inputStyle = inputStyle;
+        //InputSwitchHandler.Instance.onInputStyleSelect += inputStyle => this.inputStyle = inputStyle;
     }
 
     private void OnDisable()

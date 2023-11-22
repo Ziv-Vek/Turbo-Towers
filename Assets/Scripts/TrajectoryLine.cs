@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,17 @@ public class TrajectoryLine : MonoBehaviour
     [SerializeField, Min(3)] private int lineSegments = 60;
     [SerializeField, Min(0.2f)] private float timeOfTheFlight = 5;
     [SerializeField] private Sprite lineSprite;
-    
+
+    private void Start()
+    {
+        lineRenderer.startWidth = 0.5f;
+        lineRenderer.endWidth = 0.5f;
+    }
+
 
     public void ShowTrajectoryLine(Vector3 startPoint, Vector3 startVelocity)
     {
+        
         float timeStep = timeOfTheFlight / lineSegments;
         Vector3[] lineRendererPoints = CalculateTrajectoryLine(startPoint, startVelocity, timeStep);
 

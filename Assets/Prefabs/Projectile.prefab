@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5694548273610794567}
   - component: {fileID: 5694548273610794584}
   - component: {fileID: 2392546921861959902}
+  - component: {fileID: -2667115817964061747}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -97,7 +98,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.55
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5694548273610794584
 Rigidbody:
@@ -128,3 +129,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firePowerMultiplier: 30
+--- !u!114 &-2667115817964061747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5694548273610794585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 525952e6f0f472c41a2b8c243fa54429, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decalProjectorPrefab: {fileID: 5051764294860194972, guid: d7a624cd55c4f6c4f8d9a575b852f6dd,
+    type: 3}

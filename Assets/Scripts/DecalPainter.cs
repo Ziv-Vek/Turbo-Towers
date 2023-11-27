@@ -5,48 +5,10 @@ using UnityEngine.UI;
 
 public class DecalPainter : MonoBehaviour
 {
-    [SerializeField] private DecalTextureData[] decalData;
     [SerializeField] private GameObject decalProjectorPrefab;
-    [SerializeField] private int selectedDecalIndex;
-    [SerializeField] private Image decalImage;
 
-    private Material[] decalMaterials;
-
-    private void Start()
+    public void PaintDecal(Vector3 contactPos)
     {
-        decalMaterials = new Material[decalData.Length];
-        selectedDecalIndex = 0;
-        foreach (Image image in FindObjectsOfType<Image>())
-        {
-            if (image.CompareTag("Decal"))
-            {
-                decalImage = image;
-                break;
-            }
-            
-        }
-
-        decalImage.sprite = decalData[selectedDecalIndex].sprite;
+        Instantiate(decalProjectorPrefab, new Vector3(contactPos.x, 0.1f, contactPos.z), Quaternion.Euler(90, 0, 0));
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            selectedDecalIndex++;
-            if (selectedDecalIndex >= decalData.Length)
-                selectedDecalIndex = 0;
-            decalImage.sprite = decalData[selectedDecalIndex].sprite;
-        }
-    }
-}
-
-/// <summary>
-/// Decal data to store sprite and size
-/// </summary>
-[Serializable]
-public class DecalTextureData
-{
-    public Sprite sprite;
-    public Vector3 size;
 }

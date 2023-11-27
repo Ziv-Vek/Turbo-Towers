@@ -6,7 +6,7 @@ public class InputSwitchHandler : MonoBehaviour
 {
    public Button input1Btn;
    public Button input2Btn;
-   public Button input3Btn;
+   public Button aimAssistBtn;
 
    public Action<int> onInputStyleSelect;
 
@@ -33,23 +33,18 @@ public class InputSwitchHandler : MonoBehaviour
       {
          btn.GetComponent<Image>().color = Color.red;
          input2Btn.GetComponent<Image>().color = Color.white;
-         input3Btn.GetComponent<Image>().color = Color.white;
-         
          onInputStyleSelect?.Invoke(1);
       } else if (btnHash == input2Btn.GetHashCode())
       {
          btn.GetComponent<Image>().color = Color.red;
          input1Btn.GetComponent<Image>().color = Color.white;
-         input3Btn.GetComponent<Image>().color = Color.white;
          
          onInputStyleSelect?.Invoke(2);
-      }else if (btnHash == input3Btn.GetHashCode())
-      {
-         btn.GetComponent<Image>().color = Color.red;
-         input1Btn.GetComponent<Image>().color = Color.white;
-         input2Btn.GetComponent<Image>().color = Color.white;
-         
-         onInputStyleSelect?.Invoke(3);
       }
+   }
+
+   public void ToggleAimAssist()
+   {
+      //TODO: add aim assist system
    }
 }

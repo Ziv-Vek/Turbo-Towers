@@ -20,6 +20,13 @@ public class PlayerAttacker : MonoBehaviour
      private bool isAvailableToFire = true;
      private Scene testScene;
 
+     private InputSwitchHandler inputSwitchHandler;
+
+     private void Awake()
+     {
+          inputSwitchHandler = InputSwitchHandler.Instance;
+     }
+
      private void OnEnable()
      {
           // powerBtn.OnShortClicked += PowerUpStartHandler;

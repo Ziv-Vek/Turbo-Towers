@@ -13,15 +13,16 @@ public class Projectile : MonoBehaviour
     
     public void Fire(Vector3 fireVector, float firePowerMagnitude)
     {
-        this.GetComponent<Rigidbody>().AddForce(fireVector * (firePowerMagnitude * firePowerMultiplier), ForceMode.VelocityChange);
+        GetComponent<Rigidbody>().AddForce(fireVector * (firePowerMagnitude * firePowerMultiplier), ForceMode.VelocityChange);
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        if (other.gameObject.CompareTag("Player")) return;
         if (TryGetComponent<DecalPainter>(out var decalPainter))
         {
-            // decalPainter.PaintDecal(other.contacts[0].point);
-    
+            decalPainter.PaintDecal(other.GetContact(0).point);
+            Destroy(this);
         }
         
     }

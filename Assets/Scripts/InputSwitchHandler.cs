@@ -8,7 +8,7 @@ public class InputSwitchHandler : MonoBehaviour
    public Button input2Btn;
    public Button aimAssistBtn;
 
-   public Action<int> onInputStyleSelect;
+   public Action<int> OnInputStyleSelect;
 
    public static InputSwitchHandler Instance;
 
@@ -33,13 +33,13 @@ public class InputSwitchHandler : MonoBehaviour
       {
          btn.GetComponent<Image>().color = Color.red;
          input2Btn.GetComponent<Image>().color = Color.white;
-         onInputStyleSelect?.Invoke(1);
+         OnInputStyleSelect?.Invoke(1);
       } else if (btnHash == input2Btn.GetHashCode())
       {
          btn.GetComponent<Image>().color = Color.red;
          input1Btn.GetComponent<Image>().color = Color.white;
          
-         onInputStyleSelect?.Invoke(2);
+         OnInputStyleSelect?.Invoke(2);
       }
    }
 

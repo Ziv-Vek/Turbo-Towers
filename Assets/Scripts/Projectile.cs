@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
         if (TryGetComponent<DecalPainter>(out var decalPainter))
         {
             decalPainter.PaintDecal(other.GetContact(0).point);
-            Destroy(this);
+            Destroy(gameObject);
         }
         
     }

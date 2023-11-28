@@ -16,15 +16,18 @@ public class TrajectoryLine : MonoBehaviour
         lineRenderer.endWidth = 0.5f;
     }
 
-
     public void ShowTrajectoryLine(Vector3 startPoint, Vector3 startVelocity)
     {
-        
         float timeStep = timeOfTheFlight / lineSegments;
         Vector3[] lineRendererPoints = CalculateTrajectoryLine(startPoint, startVelocity, timeStep);
 
         lineRenderer.positionCount = lineSegments;
         lineRenderer.SetPositions(lineRendererPoints);
+    }
+
+    public void RemoveTrajectoryLine()
+    {
+        lineRenderer.positionCount = 0;
     }
 
     private Vector3[] CalculateTrajectoryLine(Vector3 startPoint, Vector3 startVelocity, float timeStep)

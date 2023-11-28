@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public static event Action<int> onHorizontalTouchDrag;
     // public static event Action<Vector2> onTouchStarted;
     // public static event Action<Vector2> onTouchPerformed; 
-    // public static event Action onTouchEnded;
+    public static event Action onTouchEnded;
     #endregion
 
     private void Awake()
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
     void TouchCanceled(InputAction.CallbackContext context)
     {
         isTouching = false;
-        // onTouchEnded?.Invoke();
+        onTouchEnded?.Invoke();
     }
 
     IEnumerator TouchDrag(Vector2 startTouchPos)

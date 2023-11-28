@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -8,10 +9,14 @@ public class DecalFaider : MonoBehaviour
     private float timer;
 
     private DecalProjector decalProjector;
-    
-    private void Start()
+
+    private void Awake()
     {
         decalProjector = GetComponent<DecalProjector>();
+    }
+
+    private void Start()
+    {
         timer = disappearTimer;
     }
     

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -20,19 +21,24 @@ public class PlayerAttacker : MonoBehaviour
      private bool isAvailableToFire = true;
      private Scene testScene;
 
-     private InputSwitchHandler inputSwitchHandler;
-
-     private void Awake()
-     {
-          inputSwitchHandler = InputSwitchHandler.Instance;
-     }
-
+     // private InputSwitchHandler inputSwitchHandler;
+     private int inputStyle = 1;
+     
      private void OnEnable()
      {
           // powerBtn.OnShortClicked += PowerUpStartHandler;
           powerBtn.OnHoldClickMaxed += Fire;
           powerBtn.OnClickUp += PowerClickedUpHandler;
           powerBtn.OnClickDown += PowerClickedDownHandler;
+
+          StartCoroutine(HandleInputListeners());
+     }
+
+     private IEnumerator HandleInputListeners()
+     {
+          if (!InputSwitchHandler.Instance) yield return null;
+          
+          InputSwitchHandler.Instance.OnInputStyleSelect += SetInputStyle;
      }
 
      private void OnDisable()
@@ -41,20 +47,32 @@ public class PlayerAttacker : MonoBehaviour
           powerBtn.OnHoldClickMaxed -= Fire;
           powerBtn.OnClickUp -= PowerClickedUpHandler;
           powerBtn.OnClickDown -= PowerClickedDownHandler;
+          
+          InputSwitchHandler.Instance.OnInputStyleSelect -= SetInputStyle;
+
      }
      
      private void Start()
      {
           testScene = SceneManager.CreateScene("TestScene");
           powerSlider.maxValue = powerBtn.HoldDuration;
-     }
 
+     }
+     
      private void Update()
      {
+          if (inputStyle != 1 ) return;
+          
+          
           if (isAvailableToFire && isPoweringUp)
           {
                PowerUpHandler();
           }
+     }
+
+     private void SetInputStyle(int inputStyle)
+     {
+          this.inputStyle = inputStyle;
      }
 
      private void PowerUpStartHandler()
@@ -68,7 +86,8 @@ public class PlayerAttacker : MonoBehaviour
                return;
           
           powerSlider.value += Time.deltaTime;
-          trajectoryLine.ShowTrajectoryLine(turretExit.position, turretExit.up * (powerSlider.value / powerSlider.maxValue) * projectile.FirePowerMultiplier);
+          trajectoryLine.ShowTrajectoryLine(turretExit.position,
+               turretExit.up * (powerSlider.value / powerSlider.maxValue) * projectile.FirePowerMultiplier);
           if (powerSlider.value >= powerSlider.maxValue)
                Fire();
      }
@@ -83,6 +102,7 @@ public class PlayerAttacker : MonoBehaviour
           };
           
           Fire();
+          trajectoryLine.RemoveTrajectoryLine();
      }
 
      private void PowerClickedDownHandler()
@@ -97,7 +117,6 @@ public class PlayerAttacker : MonoBehaviour
           var projectile =
                Instantiate(this.projectile, turretExit.transform.position, Quaternion.identity);
           
-          Debug.DrawRay(projectile.transform.position, turretExit.up * 100f, Color.red, 2f, false);
           projectile.Fire(turretExit.up, powerSlider.value / powerSlider.maxValue);
           powerSlider.value = 0;
      }

@@ -23,6 +23,11 @@ public class PlayerAttacker : MonoBehaviour
 
      // private InputSwitchHandler inputSwitchHandler;
      private int inputStyle = 1;
+
+     #region Events
+     public event Action OnTurretPowering;
+     public event Action OnTurretFired;
+     #endregion
      
      private void OnEnable()
      {
@@ -107,6 +112,7 @@ public class PlayerAttacker : MonoBehaviour
 
      private void PowerClickedDownHandler()
      {
+          OnTurretPowering?.Invoke();
           isPoweringUp = true;
      }
 
@@ -119,6 +125,8 @@ public class PlayerAttacker : MonoBehaviour
           
           projectile.Fire(turretExit.up, powerSlider.value / powerSlider.maxValue);
           powerSlider.value = 0;
+
+          OnTurretFired?.Invoke();
      }
      
 }

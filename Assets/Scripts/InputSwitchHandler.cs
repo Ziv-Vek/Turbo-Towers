@@ -8,7 +8,7 @@ public class InputSwitchHandler : MonoBehaviour
    public Button input2Btn;
    public Button aimAssistBtn;
 
-   public Action<int> OnInputStyleSelect;
+   public event Action<int> OnInputStyleSelect;
 
    public static InputSwitchHandler Instance;
 

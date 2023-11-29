@@ -514,6 +514,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 175d373de941ab84891ccda365eee4d3, type: 3}
+--- !u!4 &196592575 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6603399800035814815, guid: e1ef48b815c345742813557c196f9b45,
+    type: 3}
+  m_PrefabInstance: {fileID: 3207057369400683213}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &200515227
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,7 +1651,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 3207057369400683213}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2016612884}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e41212ff99b9df643a1fff01b73ce6f5, type: 3}
@@ -4008,6 +4014,32 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2015624443}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2016612884 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3207057371291390958, guid: e1ef48b815c345742813557c196f9b45,
+    type: 3}
+  m_PrefabInstance: {fileID: 3207057369400683213}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2016612890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016612884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dc64cc13bdf42b69466102c9c6aa1c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHoldDuration: 5
+  powerSlider: {fileID: 1497469059}
+  cooldownTime: 1
+  powerChangeSpeed: 0.05
+  turretExit: {fileID: 196592575}
+  projectile: {fileID: 2392546921861959902, guid: 1be46dfb9fdfd0a41b5ebbc612dd48c0,
+    type: 3}
+  trajectoryLine: {fileID: 842348813}
 --- !u!4 &2029404887 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3207057371291390953, guid: 175d373de941ab84891ccda365eee4d3,
@@ -4912,6 +4944,31 @@ PrefabInstance:
         type: 3}
       propertyPath: timeOfTheFlight
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641979739561144946, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641979739561144946, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641979739561144946, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641979739561144946, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641979739561144946, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8357385932013151720, guid: e1ef48b815c345742813557c196f9b45,
         type: 3}

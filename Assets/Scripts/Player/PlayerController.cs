@@ -9,13 +9,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float touchDragDeadZone = 5f;
     [SerializeField] private float minAngleToPowerup = 60;
     [SerializeField] private float maxAngleToRotate = 50;
+    [SerializeField] private float minVerticalDelta = 2f;
   
     // variables:
     private bool isTouching = false;
     bool isFirstTouch = true;
     bool isMoving = false;
+    private int inputStyle = 1;
 
-    private Vector2 startPos = new Vector2();
+    // private Vector2 startPos = new Vector2();
+    private Vector2 previousTouchPos = new Vector2();
   
     // cached ref:
     private Coroutine inputDragCoroutine;
@@ -24,7 +27,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction touchPositionAction;
     private InputAction touchPressAction;
-  
+
     #region EVENTS
 
     public static event Action<int> onVerticalTouchDrag;
@@ -46,18 +49,35 @@ public class PlayerController : MonoBehaviour
     private void OnEnable() {
         touchPressAction.performed += TouchPressed;
         touchPressAction.canceled += TouchCanceled;
+        
+        StartCoroutine(HandleInputListeners());
     }
 
     private void OnDisable()
     {
         touchPressAction.performed += TouchPressed;
         touchPressAction.canceled -= TouchCanceled;
+        
+        InputSwitchHandler.Instance.OnInputStyleSelect -= SetInputStyle;
+    }
+    
+    private IEnumerator HandleInputListeners()
+    {
+        if (!InputSwitchHandler.Instance) yield return null;
+          
+        InputSwitchHandler.Instance.OnInputStyleSelect += SetInputStyle;
+    }
+
+    private void SetInputStyle(int inputStyle)
+    {
+        this.inputStyle = inputStyle;
     }
 
     void TouchPressed(InputAction.CallbackContext context)
     {
         Vector2 startTouchPos = touchPositionAction.ReadValue<Vector2>();
-        startPos = startTouchPos;
+        // startPos = startTouchPos;
+        previousTouchPos = startTouchPos;
         
         isTouching = true;
         
@@ -81,31 +101,64 @@ public class PlayerController : MonoBehaviour
          while (isTouching)
          {
              currentTouchPos = touchPositionAction.ReadValue<Vector2>();
-             if (Vector2.Distance(startTouchPos, currentTouchPos) > touchDragDeadZone)
-             {
-                 //onTouchPerformed?.Invoke(currentTouchPos);
-                angle = Mathf.Atan2(currentTouchPos.y - startPos.y, currentTouchPos.x - startPos.x) * 180 / Mathf.PI;
 
-                HandleVerticalDragActionByTouchAngle(angle);
-                HandelHorizontalActionByTouchAngle(angle);
-             }
+             (bool isOutsideOfDeadzone, bool isVerticalDeltaEnough) = IsOutsideMinimalDrag(startTouchPos, currentTouchPos);
+             
+             angle = Mathf.Atan2(currentTouchPos.y - startTouchPos.y, currentTouchPos.x - startTouchPos.x) * 180 / Mathf.PI;
+             // if (Vector2.Distance(startTouchPos, currentTouchPos) > touchDragDeadZone)
+
+             // Debug.Log($"current touch y is {currentTouchPos.y}, previous touch y is {previousTouchPos.y}");
+             // Debug.Log($"is vertical valid: {isVerticalDeltaEnough}");
+             
+             if (isVerticalDeltaEnough) 
+                 HandleVerticalDragActionByTouchAngle(angle, currentTouchPos.y);
+             if (isOutsideOfDeadzone)
+                 HandelHorizontalActionByTouchAngle(angle);
+
+           previousTouchPos = currentTouchPos;
+             
              yield return null;
          }
     }
 
-    private void HandleVerticalDragActionByTouchAngle(float angle)
+    private (bool, bool) IsOutsideMinimalDrag(Vector2 startTouchPos, Vector2 currentTouchPos)
     {
-        // Vertical drag up:
-        if (angle >= minAngleToPowerup && angle <= (180 - minAngleToPowerup))
+        var isOutsideDeadzone = Vector2.Distance(startTouchPos, currentTouchPos) > touchDragDeadZone;
+        var isVerticalDeltaEnough = Mathf.Abs(Mathf.Abs(currentTouchPos.y) - Mathf.Abs(previousTouchPos.y)) > minVerticalDelta;
+
+        return (isOutsideDeadzone, isVerticalDeltaEnough);
+    }
+
+    private void HandleVerticalDragActionByTouchAngle(float angle, float currentTouchY)
+    {
+        if (inputStyle == 1)
         {
-            onVerticalTouchDrag?.Invoke(1);
-        }
-        // Vertical drag down:
-        else if (angle <= -minAngleToPowerup && angle >= (-180 + minAngleToPowerup))
+            // Vertical drag up:
+            if (angle >= minAngleToPowerup && angle <= (180 - minAngleToPowerup))
+            {
+                onVerticalTouchDrag?.Invoke(1);
+            }
+            // Vertical drag down:
+            else if (angle <= -minAngleToPowerup && angle >= (-180 + minAngleToPowerup))
+            {
+                onVerticalTouchDrag?.Invoke(-1);
+            }
+        } else if (inputStyle == 2)
         {
-            onVerticalTouchDrag?.Invoke(-1);
+            // Check if dragging within allowed vertical angles:
+            if (!(angle >= minAngleToPowerup && angle <= (180 - minAngleToPowerup))
+                && !(angle <= -minAngleToPowerup && angle >= (-180 + minAngleToPowerup)))
+                return;
+            
+            // Vertical drag up:
+            if (currentTouchY > previousTouchPos.y)
+                onVerticalTouchDrag?.Invoke(1);
+            else
+            // Vertical drag down:
+                onVerticalTouchDrag?.Invoke(-1);
         }
     }
+    
     private void HandelHorizontalActionByTouchAngle(float angle)
     {
         // Horizontal drag right:

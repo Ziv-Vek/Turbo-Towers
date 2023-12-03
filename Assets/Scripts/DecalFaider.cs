@@ -24,7 +24,7 @@ public class DecalFaider : MonoBehaviour
     {
         timer -= Time.deltaTime;
         
-        if (timer <= 0) Destroy(this);
+        if (timer <= 0) Destroy(gameObject);
 
         FadeOutDecal();
     }

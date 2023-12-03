@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private MeshRenderer baseRenderer;
+    [SerializeField] private MeshRenderer headRenderer;
+    
+    private Material headMaterial;
+    private Material baseMaterial;
+
+    public void PaintTargeted()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -12,6 +12,8 @@ public class InputSwitchHandler : MonoBehaviour
 
    public static InputSwitchHandler Instance;
 
+   public AimAssist aimAssist;
+
    private void Awake()
    {
       if (Instance == null)
@@ -45,6 +47,14 @@ public class InputSwitchHandler : MonoBehaviour
 
    public void ToggleAimAssist()
    {
-      //TODO: add aim assist system
+      aimAssist.enabled = !aimAssist.enabled;
+      if (aimAssist.enabled)
+       {
+           aimAssistBtn.GetComponent<Image>().color = Color.red;
+       }
+       else
+       {
+           aimAssistBtn.GetComponent<Image>().color = Color.white;
+       }
    }
 }

@@ -1,18 +1,55 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, ITargetable
 {
-    [SerializeField] private MeshRenderer baseRenderer;
-    [SerializeField] private MeshRenderer headRenderer;
-    
-    private Material headMaterial;
-    private Material baseMaterial;
+    [SerializeField] private Material targetedHeadMaterial;
+    [SerializeField] private Material headTargetedMaterial;
+    [SerializeField] private Renderer headRenderer;
+    [SerializeField] private Renderer baseRenderer;
 
-    public void PaintTargeted()
+    private Material originalHeadMaterial;
+    private Material originalBaseMaterial;
+
+    private const float IntervalBetweenTargetUnpainting = 2f;
+
+    private void Awake()
     {
-        
+        originalHeadMaterial = headRenderer.material;
+        originalBaseMaterial = baseRenderer.material;
     }
 
+    private void Start()
+    {
+        StartCoroutine(ContinuesUnpainingTarget());
+    }
+
+    private IEnumerator ContinuesUnpainingTarget()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(IntervalBetweenTargetUnpainting);
+            UnPaintTargeted();
+        }
+    }
+
+    private void ResetMaterial()
+    {
+        headRenderer.material = originalHeadMaterial;
+        baseRenderer.material = originalBaseMaterial;
+    }
+    
+    public void PaintTargeted()
+    {
+        Debug.Log("painting: " + gameObject.name);
+        headRenderer.material = targetedHeadMaterial;
+        baseRenderer.material = headTargetedMaterial;
+    }
+
+    public void UnPaintTargeted()
+    {
+        ResetMaterial();
+    }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerRotator : MonoBehaviour
 {
-    [SerializeField] private Transform turretHead;
+    [SerializeField] public Transform turretHead;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private Transform turretPivot;
     [SerializeField] private float pitchSpeed = 15f;

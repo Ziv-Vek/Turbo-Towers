@@ -93,7 +93,7 @@ BoxCollider:
   m_GameObject: {fileID: 3207057369569502976}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -190,7 +190,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 3207057370867956953}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
@@ -290,7 +290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 87e820cf75265874fac6ab8338fc6709, type: 2}
+  - {fileID: 2100000, guid: 4f3731df9df65ed439c3f35c9d845162, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -321,7 +321,7 @@ SphereCollider:
   m_GameObject: {fileID: 3207057371209128299}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -335,6 +335,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3207057371291390953}
   - component: {fileID: 7942974783667820482}
+  - component: {fileID: 6475013467792174449}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -371,5 +372,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fea0bbf5b750fb48bc9909ea9084580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseRenderer: {fileID: 3207057369569503005}
+  targetedHeadMaterial: {fileID: 2100000, guid: 87e820cf75265874fac6ab8338fc6709,
+    type: 2}
+  headTargetedMaterial: {fileID: 2100000, guid: 6ef333192a6493c41920b14d2e83f5f1,
+    type: 2}
   headRenderer: {fileID: 3207057371209128292}
+  baseRenderer: {fileID: 3207057369569503005}
+--- !u!65 &6475013467792174449
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3207057371291390958}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.11, y: 2.87, z: 2.22}
+  m_Center: {x: 0, y: 0.45, z: 0}

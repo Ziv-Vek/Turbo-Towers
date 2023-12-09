@@ -1,18 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float firePowerMultiplier = 2f;
+
+    private Teleport attacker;
+    
     public float FirePowerMultiplier
     {
         get { return firePowerMultiplier; }
     }
     
-    public void Fire(Vector3 fireVector, float firePowerMagnitude)
+    public void Fire(Vector3 fireVector, float firePowerMagnitude, Teleport attacker)
     {
+        this.attacker = attacker;
         GetComponent<Rigidbody>().AddForce(fireVector * (firePowerMagnitude * firePowerMultiplier), ForceMode.VelocityChange);
     }
 
@@ -24,8 +27,13 @@ public class Projectile : MonoBehaviour
             decalPainter.PaintDecal(other.GetContact(0).point);
             Destroy(gameObject);
         }
-        
     }
-    
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out Portal portal))
+        {
+            portal.PerformAction(attacker);
+        }
+    }
 }

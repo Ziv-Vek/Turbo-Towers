@@ -146,7 +146,7 @@ public class PlayerSlideAttacker : MonoBehaviour
           
           var projectile = Instantiate(this.projectile, turretExit.transform.position, Quaternion.identity);
           
-          projectile.Fire(turretExit.up, powerSlider.value / powerSlider.maxValue);
+          projectile.Fire(turretExit.up, powerSlider.value / powerSlider.maxValue, GetComponent<Teleport>());
           powerSlider.value = 0;
           trajectoryLine.RemoveTrajectoryLine();
 

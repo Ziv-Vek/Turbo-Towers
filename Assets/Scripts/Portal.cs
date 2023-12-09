@@ -7,7 +7,6 @@ public class Portal : MonoBehaviour, ITargetable
 {
     [SerializeField] private Material targetedMaterial;
     private Material baseMaterial;
-    private bool isOccupied = false;
 
     void Start()
     {
@@ -23,23 +22,25 @@ public class Portal : MonoBehaviour, ITargetable
     {
         GetComponent<Renderer>().material = baseMaterial;
     }
-
-    private void OnTriggerEnter(Collider other)
+    
+    public void PerformAction(Teleport attacker)
     {
-        if (other.TryGetComponent(out Teleportation teleportation))
+        if (attacker != null)
         {
-            teleportation.Teleport(transform.position);
+            attacker.TeleporHandler(attacker, this);
             DeactivatePortal();
         }
     }
 
-    private void ActivatePortal()
+    public void ActivatePortal()
     {
-        
+        GetComponent<Collider>().enabled = false;
+        GetComponent<Renderer>().enabled = false;
     }
-    
-    private void DeactivatePortal()
+
+    public void DeactivatePortal()
     {
-        
+        GetComponent<Collider>().enabled = false;
+        GetComponent<Renderer>().enabled = false;
     }
 }

@@ -21,10 +21,10 @@ public class PlayerRotator : MonoBehaviour
         PlayerController.onHorizontalTouchDrag += HorizontalTouchDragHandler;
         PlayerController.onVerticalTouchDrag += VerticalTouchDragHandler;
 
-        GetComponent<PlayerAttacker>().OnTurretPowering += ToggleHorizontalRotation;
-        GetComponent<PlayerAttacker>().OnTurretFired += ToggleHorizontalRotation;
-        GetComponent<PlayerSlideAttacker>().OnTurretPowering += ToggleHorizontalRotation;
-        GetComponent<PlayerSlideAttacker>().OnTurretFired += ToggleHorizontalRotation;
+        GetComponent<PlayerAttacker>().OnTurretPowering += DisableRotation;
+        GetComponent<PlayerAttacker>().OnTurretFired += EnableRotation;
+        GetComponent<PlayerSlideAttacker>().OnTurretPowering += DisableRotation;
+        GetComponent<PlayerSlideAttacker>().OnTurretFired += EnableRotation;
 
         StartCoroutine(HandleInputListeners());
     }
@@ -34,10 +34,10 @@ public class PlayerRotator : MonoBehaviour
         PlayerController.onHorizontalTouchDrag -= HorizontalTouchDragHandler;
         PlayerController.onVerticalTouchDrag -= VerticalTouchDragHandler;
         
-        GetComponent<PlayerAttacker>().OnTurretPowering -= ToggleHorizontalRotation;
-        GetComponent<PlayerAttacker>().OnTurretFired -= ToggleHorizontalRotation;
-        GetComponent<PlayerSlideAttacker>().OnTurretPowering -= ToggleHorizontalRotation;
-        GetComponent<PlayerSlideAttacker>().OnTurretFired -= ToggleHorizontalRotation;
+        GetComponent<PlayerAttacker>().OnTurretPowering -= DisableRotation;
+        GetComponent<PlayerAttacker>().OnTurretFired -= EnableRotation;
+        GetComponent<PlayerSlideAttacker>().OnTurretPowering -= DisableRotation;
+        GetComponent<PlayerSlideAttacker>().OnTurretFired -= EnableRotation;
         
         InputSwitchHandler.Instance.OnInputStyleSelect -= InputStyleSelectHandler;
     }
@@ -99,9 +99,17 @@ public class PlayerRotator : MonoBehaviour
         // turretPivot.SetPositionAndRotation(turretPivot.transform.localPosition, rot);
     }
 
-    private void ToggleHorizontalRotation()
+
+    private void DisableRotation()
     {
-        isHorizontalRotationActive = !isHorizontalRotationActive;
+        isHorizontalRotationActive = false;
     }
+
+    private void EnableRotation()
+    {
+         isHorizontalRotationActive = true;
+    }
+
+
     
 }

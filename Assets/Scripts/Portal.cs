@@ -22,20 +22,11 @@ public class Portal : MonoBehaviour, ITargetable
     {
         GetComponent<Renderer>().material = baseMaterial;
     }
-    
-    public void PerformAction(Teleport attacker)
-    {
-        if (attacker != null)
-        {
-            attacker.TeleporHandler(attacker, this);
-            DeactivatePortal();
-        }
-    }
 
     public void ActivatePortal()
     {
-        GetComponent<Collider>().enabled = false;
-        GetComponent<Renderer>().enabled = false;
+        GetComponent<Collider>().enabled = true;
+        GetComponent<Renderer>().enabled = true;
     }
 
     public void DeactivatePortal()

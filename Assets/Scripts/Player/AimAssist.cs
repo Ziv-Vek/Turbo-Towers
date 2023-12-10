@@ -22,11 +22,11 @@ public class AimAssist : MonoBehaviour
     public GameObject dummyCube;
 
     private float cooldownTimer = 0f;
-    private const float AUTO_AIM_COOLDOWN_TIME = 3f;
+    private const float AUTO_AIM_COOLDOWN_TIME = 2f;
 
     private void Start()
     {
-        cooldownTimer = AUTO_AIM_COOLDOWN_TIME;
+        cooldownTimer = -1;
         started = true;
     }
 
@@ -75,16 +75,17 @@ public class AimAssist : MonoBehaviour
         {
             var closestTarget = FindClosestTarget();
             
-            if(cooldownTimer > 0f)
+            if(cooldownTimer < 0f)
             {
                 AutoAimAtTarget(closestTarget);
-                cooldownTimer -= Time.fixedDeltaTime;
+                cooldownTimer = AUTO_AIM_COOLDOWN_TIME;
             }
         }
 
-        if (cooldownTimer < 0f)
+        if (cooldownTimer >= 0f)
         {
-            StartCooldown();
+            cooldownTimer -= Time.deltaTime;
+            //StartCooldown();
         }
         
 

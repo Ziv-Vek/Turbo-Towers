@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Teleport : MonoBehaviour
+public class TeleportationController : MonoBehaviour
 {
     private Portal currentPortal;
-    [SerializeField] private GameObject portalPrefab;
+    [SerializeField] private Portal portalPrefab;
 
     private void Start()
     {
@@ -18,9 +18,11 @@ public class Teleport : MonoBehaviour
         }
     }
 
-    public void TeleporHandler(Teleport attacker, Portal newPortal)
+    public void Teleport(Portal newPortal)
     {
-        currentPortal = newPortal;
         transform.SetPositionAndRotation(new Vector3(newPortal.transform.position.x, transform.position.y, newPortal.transform.position.z), Quaternion.identity);
+        currentPortal.ActivatePortal();
+        currentPortal = newPortal;
+        currentPortal.DeactivatePortal();
     }
 }

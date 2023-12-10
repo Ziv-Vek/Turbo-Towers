@@ -6,14 +6,14 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float firePowerMultiplier = 2f;
 
-    private Teleport attacker;
+    private TeleportationController attacker;
     
     public float FirePowerMultiplier
     {
         get { return firePowerMultiplier; }
     }
     
-    public void Fire(Vector3 fireVector, float firePowerMagnitude, Teleport attacker)
+    public void Fire(Vector3 fireVector, float firePowerMagnitude, TeleportationController attacker)
     {
         this.attacker = attacker;
         GetComponent<Rigidbody>().AddForce(fireVector * (firePowerMagnitude * firePowerMultiplier), ForceMode.VelocityChange);
@@ -31,9 +31,12 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Portal portal))
+        if (other.GetComponent<Portal>() != null)
         {
-            portal.PerformAction(attacker);
+            attacker.Teleport(other.GetComponent<Portal>());
         }
+
+        Destroy(gameObject);
     }
+
 }

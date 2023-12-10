@@ -3,5 +3,5 @@ using UnityEngine;
 
 public interface IActionable
 {
-        public void PerformAction([CanBeNull] Teleport teleported);
+        public void PerformActionOnHit([CanBeNull] TeleportationController teleported);
 }

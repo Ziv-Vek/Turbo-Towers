@@ -4755,6 +4755,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1499831840}
     m_Modifications:
+    - target: {fileID: 1261716590540731577, guid: 175d373de941ab84891ccda365eee4d3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057370867956952, guid: 175d373de941ab84891ccda365eee4d3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371209128298, guid: 175d373de941ab84891ccda365eee4d3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3207057371291390953, guid: 175d373de941ab84891ccda365eee4d3,
         type: 3}
       propertyPath: m_RootOrder
@@ -4814,6 +4829,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7660836847653511570, guid: 175d373de941ab84891ccda365eee4d3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 175d373de941ab84891ccda365eee4d3, type: 3}

@@ -74,5 +74,17 @@ namespace Map
 
             return (found, closestEnemyPoint);
         }
+        
+        public List<MapPoint> GetEnemyPlayers()
+        {
+            var enemyPlayers = new List<MapPoint>();
+            foreach (var mapPoint in _mapPoints.Values)
+            {
+                if (mapPoint.Type != PointType.Enemy) continue;
+                enemyPlayers.Add(mapPoint);
+            }
+
+            return enemyPlayers;
+        }
     }
 }

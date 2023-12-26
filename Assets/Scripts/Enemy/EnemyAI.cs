@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BehavioralTree;
 using Enemy.Models;
 using Map;
 using Map.Models;
@@ -14,74 +15,103 @@ namespace Enemy
 
         private EnemyController _enemyController;
         private PlayerRotator _playerRotator;
+        private BTNode behaviorTree;
 
         private EnemyState State { get; set; } = EnemyState.Idle;
 
         private void Start()
         {
+            behaviorTree = BuildBehaviorTree();
+
             _enemyController = GetComponent<EnemyController>();
             _playerRotator = GetComponent<PlayerRotator>();
             mapManager.RegisterPoint(transform.position, PointType.Enemy);
         }
 
+
         void Update()
         {
-            if (State == EnemyState.KnockedOut) return;
-            EnemyAction bestAction = DetermineBestAction();
-            ExecuteAction(bestAction);
+            behaviorTree.Execute();
         }
 
-        EnemyAction DetermineBestAction()
+        private BTNode BuildBehaviorTree()
         {
-            float attackEnemy = CalculateAttackEnemy();
-            float retreat = CalculateRetreat();
-
-            // Choose the action with the highest utility
-            return new Dictionary<EnemyAction, float>
-                {
-                    { EnemyAction.AttackEnemy, attackEnemy },
-                    { EnemyAction.Retreat, retreat }
-                }
-                .OrderByDescending(pair => pair.Value)
-                .First().Key;
-        }
-
-        float CalculateMoveToCover()
-        {
-            // Example calculation: More useful when health is low and enemy is close
-//        return (1 - health) * (1 / (distanceToEnemy + 1));
-            return 0;
-        }
-
-        float CalculateAttackEnemy()
-        {
-            // Example calculation: More useful when ammo is high and enemy is close
-            //  return ammo * (1 / (distanceToEnemy + 1));
-            return 1;
-        }
-
-        float CalculateRetreat()
-        {
-            // Example calculation: More useful when health is very low
-            //  return (1 - health) * 2;
-            return 0;
-        }
-
-        void ExecuteAction(EnemyAction action)
-        {
-            switch (action)
+            return new Selector(new List<BTNode>
             {
-                case EnemyAction.AttackEnemy:
-                    State = EnemyState.Shooting;
-                    
-                    break;
-                case EnemyAction.Retreat:
-                    State = EnemyState.Moving;
-                    break;
+                new Sequence(new List<BTNode>
+                {
+                    new Condition(IsEnemyPlayerInSight),
+                    new ActionNode(TargetClosestEnemyPlayer),
+                    new ActionNode(AttackEnemyPlayer)
+                }),
+                new Sequence(new List<BTNode>
+                {
+                    new Condition(IsUnderThreat),
+                    new ActionNode(FindNearestCover),
+                    new ActionNode(MoveToCover)
+                }),
+                new ActionNode(Patrol)
+            });
+        }
+
+        private bool IsEnemyPlayerInSight()
+        {
+            var enemyPlayers = mapManager.GetEnemyPlayers();
+            var closestEnemyPlayer = enemyPlayers
+                .OrderBy(p => Vector3.Distance(transform.position, p.Position))
+                .FirstOrDefault();
+            if (closestEnemyPlayer == null)
+                return false;
+
+            var direction = closestEnemyPlayer.Position - transform.position;
+            var angle = Vector3.Angle(direction, transform.forward);
+            if (angle < 45f)
+            {
+                return true;
             }
 
-            State = EnemyState.Idle;
+            return false;
         }
+
+        private void TargetClosestEnemyPlayer()
+        {
+        }
+
+        private void AttackEnemyPlayer()
+        {
+        }
+
+        private bool IsUnderThreat()
+        {
+            var enemyPlayers = mapManager.GetEnemyPlayers();
+            var closestEnemyPlayer = enemyPlayers
+                .OrderBy(p => Vector3.Distance(transform.position, p.Position))
+                .FirstOrDefault();
+            if (closestEnemyPlayer == null)
+                return false;
+
+            var direction = closestEnemyPlayer.Position - transform.position;
+            var angle = Vector3.Angle(direction, transform.forward);
+            if (angle < 45f)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private void FindNearestCover()
+        {
+        }
+
+        private void MoveToCover()
+        {
+        }
+
+        private void Patrol()
+        {
+        }
+
 
         private void OnDestroy()
         {

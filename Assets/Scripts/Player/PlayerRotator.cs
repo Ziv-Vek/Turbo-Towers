@@ -33,19 +33,19 @@ public class PlayerRotator : MonoBehaviour
     {
         PlayerController.onHorizontalTouchDrag -= HorizontalTouchDragHandler;
         PlayerController.onVerticalTouchDrag -= VerticalTouchDragHandler;
-        
+
         GetComponent<PlayerAttacker>().OnTurretPowering -= DisableRotation;
         GetComponent<PlayerAttacker>().OnTurretFired -= EnableRotation;
         GetComponent<PlayerSlideAttacker>().OnTurretPowering -= DisableRotation;
         GetComponent<PlayerSlideAttacker>().OnTurretFired -= EnableRotation;
-        
+
         InputSwitchHandler.Instance.OnInputStyleSelect -= InputStyleSelectHandler;
     }
 
     private IEnumerator HandleInputListeners()
     {
         if (!InputSwitchHandler.Instance) yield return null;
-        
+
         InputSwitchHandler.Instance.OnInputStyleSelect += InputStyleSelectHandler;
     }
 
@@ -62,31 +62,48 @@ public class PlayerRotator : MonoBehaviour
     private void HorizontalTouchDragHandler(int touchDragDirection)
     {
         if (!isHorizontalRotationActive) return;
-        
-        turretHead.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime * touchDragDirection));
+
+        RotateTurretHead(touchDragDirection);
     }
-    
+
+    public void RotateTurretHead(float angle)
+    {
+        if (!isHorizontalRotationActive) return;
+
+        turretHead.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime * angle));
+    }
+
     private void VerticalTouchDragHandler(int touchDragDirection)
     {
         if (inputStyle != 1) return;
-        
-        float angleX = 360 - turretPivot.eulerAngles.x;
 
         if (touchDragDirection > 0)
         {
-            // Raise turret's pivot:
-            if (angleX <= maxPitchAngle || angleX >= 360 - maxPitchAngle)
-            {
-                turretPivot.Rotate(Vector3.right * -pitchSpeed * Time.deltaTime);
-            }
+            RaiseTurretPivot();
         }
         else
         {
-            // Lower turret's pivot:
-            if (turretPivot.eulerAngles.x > 180 || turretPivot.eulerAngles.x <= Mathf.Abs(minPitchAngle))
-            {
-                turretPivot.Rotate(Vector3.right * pitchSpeed * Time.deltaTime);
-            }
+            LowerTurretPivot();
+        }
+    }
+
+    public void RaiseTurretPivot()
+    {
+        float angleX = 360 - turretPivot.eulerAngles.x;
+
+        if (angleX <= maxPitchAngle || angleX >= 360 - maxPitchAngle)
+        {
+            turretPivot.Rotate(Vector3.right * (-pitchSpeed * Time.deltaTime));
+        }
+    }
+
+    public void LowerTurretPivot()
+    {
+        float angleX = 360 - turretPivot.eulerAngles.x;
+
+        if (angleX > 180 || angleX <= Mathf.Abs(minPitchAngle))
+        {
+            turretPivot.Rotate(Vector3.right * (pitchSpeed * Time.deltaTime));
         }
     }
 
@@ -107,9 +124,6 @@ public class PlayerRotator : MonoBehaviour
 
     private void EnableRotation()
     {
-         isHorizontalRotationActive = true;
+        isHorizontalRotationActive = true;
     }
-
-
-    
 }

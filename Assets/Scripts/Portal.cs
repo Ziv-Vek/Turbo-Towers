@@ -17,7 +17,7 @@ public class Portal : MonoBehaviour, ITargetable
     {
         GetComponent<Renderer>().material = targetedMaterial;
     }
-
+    
     public void UnPaintTargeted()
     {
         GetComponent<Renderer>().material = baseMaterial;

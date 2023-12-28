@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Enemy
 {
+    [RequireComponent(typeof(HealthHandler))]
     public class EnemyController : MonoBehaviour, ITargetable
     {
         [SerializeField] private Material targetedHeadMaterial;

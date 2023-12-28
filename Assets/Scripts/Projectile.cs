@@ -1,10 +1,13 @@
 using System;
+using System.Diagnostics;
 using JetBrains.Annotations;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float firePowerMultiplier = 2f;
+    [SerializeField] private float lifeTime = 5f;
+    [SerializeField] private int baseDamage = 1;
 
     private TeleportationController attacker;
     
@@ -15,6 +18,7 @@ public class Projectile : MonoBehaviour
     
     public void Fire(Vector3 fireVector, float firePowerMagnitude, TeleportationController attacker)
     {
+        LifeTimeHandler();
         this.attacker = attacker;
         GetComponent<Rigidbody>().AddForce(fireVector * (firePowerMagnitude * firePowerMultiplier), ForceMode.VelocityChange);
     }
@@ -22,6 +26,12 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Player")) return;
+
+        if (other.gameObject.TryGetComponent(out HealthHandler healthHandler))
+        {
+            healthHandler.TakeDamage(baseDamage);
+        }
+
         if (TryGetComponent<DecalPainter>(out var decalPainter))
         {
             decalPainter.PaintDecal(other.GetContact(0).point);
@@ -39,4 +49,8 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void LifeTimeHandler()
+    {
+        Destroy(gameObject, lifeTime);
+    }
 }

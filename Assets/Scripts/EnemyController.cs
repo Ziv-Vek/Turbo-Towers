@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(HealthHandler))]
 public class EnemyController : MonoBehaviour, ITargetable
 {
     [SerializeField] private Material targetedHeadMaterial;

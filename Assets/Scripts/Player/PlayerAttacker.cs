@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(HealthHandler))]
 public class PlayerAttacker : MonoBehaviour
 {
      [SerializeField] private HoldClickableButton powerBtn;

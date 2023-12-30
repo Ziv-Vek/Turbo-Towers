@@ -27,9 +27,21 @@ public class Projectile : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player")) return;
 
-        if (other.gameObject.TryGetComponent(out HealthHandler healthHandler))
+        if (other.gameObject.TryGetComponent(out Health target))
         {
-            healthHandler.TakeDamage(baseDamage);
+            var attackerHealth = attacker.GetComponent<Health>();
+
+            if (attackerHealth != null)
+            {
+                target.onDamageTaken += attackerHealth.GainHealth;
+            }
+            
+            target.TakeDamage(baseDamage);
+            
+            if (attackerHealth != null && target != null)
+            {
+                target.onDamageTaken -= attackerHealth.GainHealth;
+            }
         }
 
         if (TryGetComponent<DecalPainter>(out var decalPainter))

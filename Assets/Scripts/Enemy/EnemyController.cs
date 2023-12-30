@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 namespace Enemy
 {
-    [RequireComponent(typeof(HealthHandler))]
+    [RequireComponent(typeof(Health))]
     public class EnemyController : MonoBehaviour, ITargetable
     {
         [SerializeField] private Material targetedHeadMaterial;
@@ -15,7 +16,7 @@ namespace Enemy
         private Material originalBaseMaterial;
 
         private const float IntervalBetweenTargetUnpainting = 2f;
-
+        
         private void Awake()
         {
             originalHeadMaterial = headRenderer.material;

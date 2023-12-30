@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(HealthHandler))]
+[RequireComponent(typeof(Health))]
 public class PlayerAttacker : MonoBehaviour
 {
      [SerializeField] private HoldClickableButton powerBtn;
@@ -62,7 +62,6 @@ public class PlayerAttacker : MonoBehaviour
      {
           testScene = SceneManager.CreateScene("TestScene");
           powerSlider.maxValue = powerBtn.HoldDuration;
-
      }
      
      private void Update()
@@ -116,18 +115,19 @@ public class PlayerAttacker : MonoBehaviour
           OnTurretPowering?.Invoke();
           isPoweringUp = true;
      }
-
+     
      private void Fire()
      {
           isPoweringUp = false;
 
           var projectile =
                Instantiate(this.projectile, turretExit.transform.position, Quaternion.identity);
-          
-          projectile.Fire(turretExit.up, powerSlider.value / powerSlider.maxValue, GetComponent<TeleportationController>());
+
+     projectile.Fire(turretExit.up,
+          powerSlider.value / powerSlider.maxValue, 
+          GetComponent<TeleportationController>());
           powerSlider.value = 0;
 
           OnTurretFired?.Invoke();
      }
-     
 }

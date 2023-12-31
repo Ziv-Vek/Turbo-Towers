@@ -1459,7 +1459,7 @@ GameObject:
   - component: {fileID: 3207057369569503004}
   - component: {fileID: 3207057369569503005}
   - component: {fileID: 3207057369569502978}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Base
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1809,7 +1809,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3207057370986175221}
-  m_Layer: 0
+  - component: {fileID: 290260050702897003}
+  m_Layer: 7
   m_Name: Head
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1832,6 +1833,29 @@ Transform:
   - {fileID: 3207057371209128298}
   m_Father: {fileID: 3207057371291390953}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &290260050702897003
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3207057370986175226}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.14
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.87, z: 0}
 --- !u!1 &3207057371209128299
 GameObject:
   m_ObjectHideFlags: 0
@@ -2059,6 +2083,10 @@ MonoBehaviour:
   maxPitchAngle: 90
   minPitchAngle: -10
   powerBtn: {fileID: 0}
+  isSmoothImplemented: 1
+  smoothTime: 0.3
+  isLerpImplemented: 0
+  rotationLerpTime: 0.1
 --- !u!114 &9151839226240392279
 MonoBehaviour:
   m_ObjectHideFlags: 0

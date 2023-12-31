@@ -4692,6 +4692,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6953707053049541938, guid: d6b353cef89e82148a9d82819af6e1e6,
         type: 3}
+    - target: {fileID: 548799358489121025, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367031941884126057, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2367031941884126057, guid: e1ef48b815c345742813557c196f9b45,
         type: 3}
       propertyPath: m_IsActive
@@ -4716,6 +4726,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057370867956953, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371209128299, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3207057371291390953, guid: e1ef48b815c345742813557c196f9b45,
         type: 3}
@@ -4797,11 +4817,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4141363807703394836, guid: e1ef48b815c345742813557c196f9b45,
-        type: 3}
-      propertyPath: headTransform
-      value: 
-      objectReference: {fileID: 314338988}
     - target: {fileID: 5385409786099901479, guid: e1ef48b815c345742813557c196f9b45,
         type: 3}
       propertyPath: lineSprite
@@ -4817,6 +4832,11 @@ PrefabInstance:
         type: 3}
       propertyPath: timeOfTheFlight
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5451236493143751296, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5451236493143751296, guid: e1ef48b815c345742813557c196f9b45,
         type: 3}
@@ -4847,6 +4867,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
       value: 0.0727272
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868362637659086799, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5871356325530301169, guid: e1ef48b815c345742813557c196f9b45,
         type: 3}
@@ -4947,6 +4972,11 @@ PrefabInstance:
         type: 3}
       propertyPath: isSmoothImplemented
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8398645258464957382, guid: e1ef48b815c345742813557c196f9b45,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8398645258464957382, guid: e1ef48b815c345742813557c196f9b45,
         type: 3}

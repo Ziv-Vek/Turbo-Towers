@@ -16,6 +16,23 @@ public class PlayerRotator : MonoBehaviour
     private const float FixedTurretRotation = -25;
     private bool isHorizontalRotationActive = true;
 
+    [Header("Smooth Rotation")]
+    public bool isSmoothImplemented = true;
+    private float currentYAngle = 0f;
+    private float yVelocity = 0f;
+    [SerializeField] float smoothTime = 0.3f;
+
+    [Header("Lerp Rotation")]
+    public bool isLerpImplemented = false;
+    [SerializeField] private float rotationLerpTime = 0.1f; // Time taken to reach the target rotation
+    private Quaternion targetRotation;
+
+    private void Start()
+    {
+        // Initialize target rotation to the current rotation of the turret head
+        targetRotation = turretHead.rotation;
+    }
+
     private void OnEnable()
     {
         PlayerController.onHorizontalTouchDrag += HorizontalTouchDragHandler;
@@ -70,7 +87,33 @@ public class PlayerRotator : MonoBehaviour
     {
         if (!isHorizontalRotationActive) return;
 
-        turretHead.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime * angle));
+        // implements smooth rotation, or lerp rotation, or normal rotation
+        //TODO: delete two other implementations not used
+        if (isSmoothImplemented)
+        {
+            float targetAngle = currentYAngle + angle * rotationSpeed;
+            currentYAngle = Mathf.SmoothDampAngle(currentYAngle, targetAngle, ref yVelocity, smoothTime);
+
+            turretHead.rotation = Quaternion.Euler(0, currentYAngle, 0);
+        }
+        else if(isLerpImplemented)
+        {
+            /*targetRotation = Quaternion.Euler(0, angle, 0);
+            turretHead.rotation = Quaternion.Lerp(turretHead.rotation, targetRotation, rotationLerpTime);*/
+
+
+            // Calculate target rotation based on the angle
+            float yRotation = turretHead.eulerAngles.y + angle * rotationSpeed * Time.deltaTime;
+            targetRotation = Quaternion.Euler(0, yRotation, 0);
+
+            // Smoothly interpolate to the target rotation
+            turretHead.rotation = Quaternion.Slerp(turretHead.rotation, targetRotation, rotationLerpTime);
+        }
+        else
+        {
+            turretHead.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime * angle));
+        }
+        
     }
 
     private void VerticalTouchDragHandler(int touchDragDirection)

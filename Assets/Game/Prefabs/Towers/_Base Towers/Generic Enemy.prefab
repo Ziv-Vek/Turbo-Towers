@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2381812710949062016
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207057371291390958, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_Name
+      value: Generic Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7901729015351533494, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: resetValuesOnRestart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7901729015351533494, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
+      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBodyPartList","Name":"Body
+        Parts","IsShared":true,"List`1mValue":[]},{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"Targeted
+        BP Position","IsShared":true,"Vector3mValue":"(0,0,0)"},{"Type":"BehaviorDesigner.Runtime.SharedQuaternion","Name":"Targeted
+        BP Rotation","IsShared":true,"QuaternionmValue":"(0,0,0,0)"},{"Type":"BehaviorDesigner.Runtime.SharedHealth","Name":"Target
+        Tower","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBodyPart","Name":"Targeted
+        BodyPart","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"Is
+        Targeting Only Single Player","IsShared":true,"BooleanmValue":true},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"My
+        Head","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"My
+        Turret Pivot","IsShared":true,"TransformmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Projectile
+        Spawn Point","IsShared":true,"TransformmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Projectile
+        Prefab","IsShared":true,"GameObjectmValue":3},{"Type":"BehaviorDesigner.Runtime.SharedHealth","Name":"My
+        Health","IsShared":true,"HealthmValue":4},{"Type":"BehaviorDesigner.Runtime.SharedWeaponStatsSO","Name":"Weapon
+        Stats","IsShared":true,"WeaponStatsSOmValue":5}]}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7901729015351533494, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7901729015351533494, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4f0f7ac6d34848a4fa5f07e82e204e2a,
+        type: 2}
+    - target: {fileID: 7942974783667820482, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: baseTransform
+      value: 
+      objectReference: {fileID: 1396207817966335864}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3207057371291390958, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      insertIndex: 4
+      addedObject: {fileID: -1601785079899516030}
+  m_SourcePrefab: {fileID: 100100000, guid: f87dd30049bb5a541b156bae6a77ac27, type: 3}
+--- !u!1 &976198810797479534 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3207057371291390958, guid: f87dd30049bb5a541b156bae6a77ac27,
+    type: 3}
+  m_PrefabInstance: {fileID: 2381812710949062016}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-1601785079899516030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976198810797479534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e17c972b5bda3924cb807a18f66eee61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponStats: {fileID: 11400000, guid: 4f0f7ac6d34848a4fa5f07e82e204e2a, type: 2}
+--- !u!4 &1396207817966335864 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3633760131870667512, guid: f87dd30049bb5a541b156bae6a77ac27,
+    type: 3}
+  m_PrefabInstance: {fileID: 2381812710949062016}
+  m_PrefabAsset: {fileID: 0}

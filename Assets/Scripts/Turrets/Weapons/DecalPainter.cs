@@ -3,12 +3,16 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
-public class DecalPainter : MonoBehaviour
+namespace TurboTowers.Turrets.Combat
 {
-    [SerializeField] private GameObject decalProjectorPrefab;
-
-    public void PaintDecal(Vector3 contactPos)
+    public class DecalPainter : MonoBehaviour
     {
-        Instantiate(decalProjectorPrefab, new Vector3(contactPos.x, 0.1f, contactPos.z), Quaternion.Euler(90, 0, 0));
+        [SerializeField] private GameObject decalProjectorPrefab;
+
+        public void PaintDecal(Vector3 contactPos)
+        {
+            Instantiate(decalProjectorPrefab, new Vector3(contactPos.x, 0.1f, contactPos.z), Quaternion.Euler(90, 0, 0));
+        }
     }
 }
+

@@ -1,37 +1,42 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using TurboTowers.Map;
+using TurboTowers.Map.Models;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Portal : MonoBehaviour, ITargetable
 {
-    [SerializeField] private Material targetedMaterial;
-    private Material baseMaterial;
-
-    void Start()
-    {
-        baseMaterial = GetComponent<Renderer>().material;
-    }
-
-    public void PaintTargeted()
-    {
-        GetComponent<Renderer>().material = targetedMaterial;
-    }
+    public UnityEvent OnReachedPortal; 
     
-    public void UnPaintTargeted()
-    {
-        GetComponent<Renderer>().material = baseMaterial;
-    }
-
     public void ActivatePortal()
     {
         GetComponent<Collider>().enabled = true;
-        GetComponent<Renderer>().enabled = true;
+        GetComponentInChildren<Renderer>().enabled = true;
     }
 
     public void DeactivatePortal()
     {
         GetComponent<Collider>().enabled = false;
-        GetComponent<Renderer>().enabled = false;
+        GetComponentInChildren<Renderer>().enabled = false;
+        
+        OnReachedPortal?.Invoke();
+    }
+
+    private void OnDisable()
+    {
+        if (OnReachedPortal != null)
+        {
+            OnReachedPortal = null;
+        }
+    }
+
+    public int GetCurrentHealth()
+    {
+        return 1;
+    }
+
+    public bool IsAlive()
+    {
+        return true;
     }
 }

@@ -1,58 +1,27 @@
 using System;
 using System.Collections;
+using TurboTowers.Map;
+using TurboTowers.Map.Models;
 using UnityEngine;
+using TurboTowers.Turrets.Common;
 
-namespace Enemy
+namespace TurboTowers.Turrets.Controls
 {
     [RequireComponent(typeof(Health))]
-    public class EnemyController : MonoBehaviour, ITargetable
+    public class EnemyController : MonoBehaviour
     {
-        [SerializeField] private Material targetedHeadMaterial;
-        [SerializeField] private Material headTargetedMaterial;
-        [SerializeField] private Renderer headRenderer;
-        [SerializeField] private Renderer baseRenderer;
-
-        private Material originalHeadMaterial;
-        private Material originalBaseMaterial;
+        [SerializeField] private Transform baseTransform;
 
         private const float IntervalBetweenTargetUnpainting = 2f;
         
-        private void Awake()
-        {
-            originalHeadMaterial = headRenderer.material;
-            originalBaseMaterial = baseRenderer.material;
-        }
+        private MapManager mapManager;
 
-        private void Start()
-        {
-            StartCoroutine(ContinuesUnpainingTarget());
-        }
 
-        private IEnumerator ContinuesUnpainingTarget()
+        private void OnDrawGizmosSelected()
         {
-            while (true)
-            {
-                yield return new WaitForSeconds(IntervalBetweenTargetUnpainting);
-                UnPaintTargeted();
-            }
+            Gizmos.color = Color.magenta;
+            //Gizmos.DrawWireSphere(baseTransform.position, 55f);
         }
-
-        private void ResetMaterial()
-        {
-            headRenderer.material = originalHeadMaterial;
-            baseRenderer.material = originalBaseMaterial;
-        }
-    
-        public void PaintTargeted()
-        {
-            Debug.Log("painting: " + gameObject.name);
-            headRenderer.material = targetedHeadMaterial;
-            baseRenderer.material = headTargetedMaterial;
-        }
-
-        public void UnPaintTargeted()
-        {
-            ResetMaterial();
-        }
+        
     }
 }

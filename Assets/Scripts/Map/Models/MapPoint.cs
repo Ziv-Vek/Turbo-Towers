@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Map.Models
+namespace TurboTowers.Map.Models
 {
     public class MapPoint
     {

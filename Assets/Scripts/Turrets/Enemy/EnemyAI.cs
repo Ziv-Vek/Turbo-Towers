@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using BehavioralTree;
-using Enemy.Models;
-using Map;
-using Map.Models;
+using TurboTowers.Enemy.Models;
+using TurboTowers.Map;
+using TurboTowers.Map.Models;
+using TurboTowers.Turrets.Movement;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Enemy
+namespace TurboTowers.Turrets.Controls
 {
     public class EnemyAI : MonoBehaviour, IEnemyAI
     {
-        [SerializeField] private MapManager mapManager;
+        [FormerlySerializedAs("mapManagerDor")] [SerializeField] private MapManager mapManager;
         [SerializeField] private EnemyAIType type;
 
         private EnemyController _enemyController;
@@ -25,9 +27,8 @@ namespace Enemy
 
             _enemyController = GetComponent<EnemyController>();
             _playerRotator = GetComponent<PlayerRotator>();
-            mapManager.RegisterPoint(transform.position, PointType.Enemy);
+            //mapManager.RegisterPoint(transform.position, PointType.Enemy);
         }
-
 
         void Update()
         {
@@ -113,9 +114,9 @@ namespace Enemy
         }
 
 
-        private void OnDestroy()
+        /*private void OnDestroy()
         {
             mapManager.RegisterPoint(transform.position, PointType.Empty);
-        }
+        }*/
     }
 }

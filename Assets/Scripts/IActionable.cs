@@ -1,7 +1,10 @@
 ﻿using JetBrains.Annotations;
 using UnityEngine;
 
-public interface IActionable
+namespace TurboTowers.Turrets.Combat
 {
+    public interface IActionable
+    {
         public void PerformActionOnHit([CanBeNull] TeleportationController teleported);
+    }        
 }

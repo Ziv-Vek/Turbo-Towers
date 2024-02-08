@@ -1,10 +1,12 @@
-namespace Map.Models
+namespace TurboTowers.Map.Models
 {
     public enum PointType
     {
         Empty,
         Player,
         Enemy,
-        Item,
+        Pickup,
+        Portal,
+        Boss
     }
 }

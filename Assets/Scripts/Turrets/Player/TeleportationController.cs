@@ -1,28 +1,35 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class TeleportationController : MonoBehaviour
+namespace TurboTowers.Turrets.Combat
 {
-    private Portal currentPortal;
-    [SerializeField] private Portal portalPrefab;
-
-    private void Start()
+    public class TeleportationController : MonoBehaviour
     {
-        if (currentPortal == null)
+        private Portal currentPortal;
+        [SerializeField] private Portal portalPrefab;
+        [Tooltip("If true, a portal will be reactivated in the previous position of the player after teleportation.")]
+        [SerializeField] private bool isReactivatingPortals = false;
+
+        private void Start()
         {
-            var newPortal = Instantiate(portalPrefab, transform.position, portalPrefab.transform.rotation);
-            currentPortal = newPortal.GetComponent<Portal>();
+            if (currentPortal == null)
+            {
+                var newPortal = Instantiate(portalPrefab, transform.position, portalPrefab.transform.rotation);
+                currentPortal = newPortal.GetComponent<Portal>();
+                currentPortal.DeactivatePortal();
+            }
+        }
+
+        public void Teleport(Portal designatedPortal)
+        {
+            transform.SetPositionAndRotation(new Vector3(designatedPortal.transform.position.x, designatedPortal.transform.position.z, designatedPortal.transform.position.z), Quaternion.identity);
+            
+            if (isReactivatingPortals)
+            {
+                currentPortal.ActivatePortal();
+            }
+            
+            currentPortal = designatedPortal;
             currentPortal.DeactivatePortal();
         }
-    }
-
-    public void Teleport(Portal newPortal)
-    {
-        transform.SetPositionAndRotation(new Vector3(newPortal.transform.position.x, transform.position.y, newPortal.transform.position.z), Quaternion.identity);
-        currentPortal.ActivatePortal();
-        currentPortal = newPortal;
-        currentPortal.DeactivatePortal();
     }
 }

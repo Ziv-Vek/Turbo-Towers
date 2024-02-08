@@ -1,60 +1,64 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TurboTowers.Turrets.Combat;
 
-public class InputSwitchHandler : MonoBehaviour
+namespace TurboTowers.Turrets.Controls
 {
-   public Button input1Btn;
-   public Button input2Btn;
-   public Button aimAssistBtn;
-
-   public event Action<int> OnInputStyleSelect;
-
-   public static InputSwitchHandler Instance;
-
-   public AimAssist aimAssist;
-
-   private void Awake()
-   {
-      if (Instance == null)
-      {
-         Instance = this;
-         DontDestroyOnLoad(gameObject);
-      }
-      else
-      {
-         Destroy(gameObject);
-      }
-   }
-
-   public void SelectInputStyle(Button btn)
-   {
-      var btnHash = btn.GetHashCode();
-
-      if (btnHash == input1Btn.GetHashCode())
-      {
-         btn.GetComponent<Image>().color = Color.red;
-         input2Btn.GetComponent<Image>().color = Color.white;
-         OnInputStyleSelect?.Invoke(1);
-      } else if (btnHash == input2Btn.GetHashCode())
-      {
-         btn.GetComponent<Image>().color = Color.red;
-         input1Btn.GetComponent<Image>().color = Color.white;
-         
-         OnInputStyleSelect?.Invoke(2);
-      }
-   }
-
-   public void ToggleAimAssist()
-   {
-      aimAssist.enabled = !aimAssist.enabled;
-      if (aimAssist.enabled)
+    public class InputSwitchHandler : MonoBehaviour
+    {
+       public Button input1Btn;
+       public Button input2Btn;
+       public Button aimAssistBtn;
+    
+       public event Action<int> OnInputStyleSelect;
+    
+       public static InputSwitchHandler Instance;
+    
+       public AimAssist aimAssist;
+    
+       private void Awake()
        {
-           aimAssistBtn.GetComponent<Image>().color = Color.red;
+          if (Instance == null)
+          {
+             Instance = this;
+             DontDestroyOnLoad(gameObject);
+          }
+          else
+          {
+             Destroy(gameObject);
+          }
        }
-       else
+    
+       public void SelectInputStyle(Button btn)
        {
-           aimAssistBtn.GetComponent<Image>().color = Color.white;
+          var btnHash = btn.GetHashCode();
+    
+          if (btnHash == input1Btn.GetHashCode())
+          {
+             btn.GetComponent<Image>().color = Color.red;
+             input2Btn.GetComponent<Image>().color = Color.white;
+             OnInputStyleSelect?.Invoke(1);
+          } else if (btnHash == input2Btn.GetHashCode())
+          {
+             btn.GetComponent<Image>().color = Color.red;
+             input1Btn.GetComponent<Image>().color = Color.white;
+             
+             OnInputStyleSelect?.Invoke(2);
+          }
        }
-   }
+    
+       public void ToggleAimAssist()
+       {
+          aimAssist.enabled = !aimAssist.enabled;
+          if (aimAssist.enabled)
+           {
+               aimAssistBtn.GetComponent<Image>().color = Color.red;
+           }
+           else
+           {
+               aimAssistBtn.GetComponent<Image>().color = Color.white;
+           }
+       }
+    }
 }

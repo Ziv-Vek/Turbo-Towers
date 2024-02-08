@@ -1,46 +1,84 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using TurboTowers.Map;
+using TurboTowers.Map.Models;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Health : MonoBehaviour
+namespace TurboTowers.Turrets.Common
 {
-    [SerializeField] private int baseHealth = 1;
-    [SerializeField] private int currentHealth = 1;
-
-    public event Action<int> onDamageTaken;
-    public event Action<int> onHealthGained;
-
-    private void Start()
+    public class Health : MonoBehaviour, ITargetable
     {
-        currentHealth = baseHealth;
-    }
-    
-    public int GetInitialHealth()
-    {
-        return baseHealth;
-    }
+        //Config:
+        [SerializeField] private float dissolveTime = 3f;
+        [SerializeField] private int baseHealth = 1;
+        [SerializeField] private int currentHealth = 1;
 
-    public void TakeDamage(int damage)
-    {
-        onDamageTaken?.Invoke(Mathf.Min(currentHealth, damage));
-        currentHealth -= damage;
+        //State:
+        private bool isAlive = true;
         
-        if (currentHealth <= 0)
+        #region Events
+
+        [SerializeField] private UnityEvent OnHealthGain;
+        [SerializeField] private UnityEvent OnHealthLoss;
+        [SerializeField] private UnityEvent OnTotalDeath;
+        public event Action<int, BodyPart> onDamageTaken;
+        public event Action<int> OnHit;
+        public event Action<int> onHealthGained;
+        public event Action OnDeath;
+        #endregion
+        
+        private void Start()
         {
-            Die();
-            return;
+            currentHealth = baseHealth;
+        }
+    
+        public int GetInitialHealth()
+        {
+            return baseHealth;
+        }
+
+        public void TakeDamage(int damage, BodyPart bodyPart)
+        {
+            OnHealthLoss?.Invoke();
+            currentHealth -= damage;
+        
+            if (currentHealth <= 0)
+            {
+                Die();
+                return;
+            }
+            
+            OnHit?.Invoke(currentHealth);
+            
+            onDamageTaken?.Invoke(Mathf.Min(currentHealth, damage), bodyPart);
+        }
+    
+        public void GainHealth(int health)
+        {
+            currentHealth += health;
+        
+            OnHealthGain?.Invoke();
+            onHealthGained?.Invoke(health);
+        }
+
+        private void Die()
+        {
+            isAlive = false;
+            OnTotalDeath?.Invoke();
+            OnDeath?.Invoke();
+        }
+
+        public int GetCurrentHealth()
+        {
+            return currentHealth;
+        }
+        
+        public bool IsAlive()
+        {
+            return isAlive;
         }
     }
-    
-    public void GainHealth(int health)
-    {
-        currentHealth += health;
-        
-        onHealthGained?.Invoke(health);
-    }
-
-    private void Die()
-    {
-        Debug.Log($"{gameObject.name} died");
-        Destroy(gameObject);
-    }
 }
+

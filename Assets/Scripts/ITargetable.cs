@@ -1,5 +1,8 @@
-﻿public interface ITargetable
+﻿using TurboTowers.Map.Models;
+using UnityEngine;
+
+public interface ITargetable
 {
-    public void PaintTargeted();
-    public void UnPaintTargeted();
+    public int GetCurrentHealth();
+    public bool IsAlive();
 }

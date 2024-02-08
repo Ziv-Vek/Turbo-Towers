@@ -23,6 +23,7 @@ public class TrajectoryLine : MonoBehaviour
 
         lineRenderer.positionCount = lineSegments;
         lineRenderer.SetPositions(lineRendererPoints);
+        //lineRenderer.transform.rotation = Quaternion.Euler(0, 90, 0);
     }
 
     public void RemoveTrajectoryLine()

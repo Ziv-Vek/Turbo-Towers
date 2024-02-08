@@ -2,35 +2,39 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class DecalFaider : MonoBehaviour
+namespace TurboTowers.Turrets.Combat
 {
-    [SerializeField] private float disappearTimer = 5f;
+    public class DecalFaider : MonoBehaviour
+    {
+        [SerializeField] private float disappearTimer = 5f;
     
-    private float timer;
+        private float timer;
 
-    private DecalProjector decalProjector;
+        private DecalProjector decalProjector;
 
-    private void Awake()
-    {
-        decalProjector = GetComponent<DecalProjector>();
-    }
+        private void Awake()
+        {
+            decalProjector = GetComponent<DecalProjector>();
+        }
 
-    private void Start()
-    {
-        timer = disappearTimer;
-    }
+        private void Start()
+        {
+            timer = disappearTimer;
+        }
     
-    private void Update()
-    {
-        timer -= Time.deltaTime;
+        private void Update()
+        {
+            timer -= Time.deltaTime;
         
-        if (timer <= 0) Destroy(gameObject);
+            if (timer <= 0) Destroy(gameObject);
 
-        FadeOutDecal();
-    }
+            FadeOutDecal();
+        }
 
-    private void FadeOutDecal()
-    {
-        decalProjector.fadeFactor = (timer / disappearTimer);
+        private void FadeOutDecal()
+        {
+            decalProjector.fadeFactor = (timer / disappearTimer);
+        }
     }
 }
+

@@ -1,172 +1,212 @@
 using System.Collections;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using TurboTowers.Turrets.Combat;
+using TurboTowers.Turrets.Controls;
+using UnityEditor;
 
-public class PlayerRotator : MonoBehaviour
+namespace TurboTowers.Turrets.Movement
 {
-    [SerializeField] public Transform turretHead;
-    [SerializeField] private float rotationSpeed = 5f;
-    [SerializeField] private Transform turretPivot;
-    [SerializeField] private float pitchSpeed = 15f;
-    [SerializeField, Range(0, 90)] private float maxPitchAngle = 60f;
-    [SerializeField, Range(-45, 0)] private float minPitchAngle = 0;
-    [SerializeField] private HoldClickableButton powerBtn;
-
-    private int inputStyle = 1;
-
-    private const float FixedTurretRotation = -25;
-    private bool isHorizontalRotationActive = true;
-
-    [Header("Smooth Rotation")]
-    public bool isSmoothImplemented = true;
-    private float currentYAngle = 0f;
-    private float yVelocity = 0f;
-    [SerializeField] float smoothTime = 0.3f;
-
-    [Header("Lerp Rotation")]
-    public bool isLerpImplemented = false;
-    [SerializeField] private float rotationLerpTime = 0.1f; // Time taken to reach the target rotation
-    private Quaternion targetRotation;
-
-    private void Start()
+    public class PlayerRotator : MonoBehaviour
     {
-        // Initialize target rotation to the current rotation of the turret head
-        targetRotation = turretHead.rotation;
-    }
+        #region Variables
+        [Space]
+        [SerializeField] public Transform turretHead;
+        [SerializeField] private float rotationSpeed = 5f;
+        [SerializeField] private Transform turretPivot;
+        [SerializeField] private float pitchSpeed = 15f;
+        [SerializeField, Range(-90, 90)] private float maxPitchAngle = 60f;
+        [SerializeField, Range(-45, 45)] private float minPitchAngle = 0;
+        [SerializeField] private HoldClickableButton powerBtn;
 
-    private void OnEnable()
-    {
-        PlayerController.onHorizontalTouchDrag += HorizontalTouchDragHandler;
-        PlayerController.onVerticalTouchDrag += VerticalTouchDragHandler;
+        private int inputStyle = 1;
 
-        GetComponent<PlayerAttacker>().OnTurretPowering += DisableRotation;
-        GetComponent<PlayerAttacker>().OnTurretFired += EnableRotation;
-        GetComponent<PlayerSlideAttacker>().OnTurretPowering += DisableRotation;
-        GetComponent<PlayerSlideAttacker>().OnTurretFired += EnableRotation;
+        private const float FixedTurretRotation = -25;
+        private bool isHorizontalRotationActive = true;
 
-        StartCoroutine(HandleInputListeners());
-    }
+        [Header("Smooth Rotation")]
+        public bool isSmoothImplemented = true;
+        private float currentYAngle = 0f;
+        private float yVelocity = 0f;
+        [SerializeField] float smoothTime = 0.3f;
 
-    private void OnDisable()
-    {
-        PlayerController.onHorizontalTouchDrag -= HorizontalTouchDragHandler;
-        PlayerController.onVerticalTouchDrag -= VerticalTouchDragHandler;
+        [Header("Lerp Rotation")]
+        public bool isLerpImplemented = false;
+        [SerializeField] private float rotationLerpTime = 0.1f; // Time taken to reach the target rotation
+        private Quaternion targetRotation;
+        private Quaternion cannonPivotRotation;
 
-        GetComponent<PlayerAttacker>().OnTurretPowering -= DisableRotation;
-        GetComponent<PlayerAttacker>().OnTurretFired -= EnableRotation;
-        GetComponent<PlayerSlideAttacker>().OnTurretPowering -= DisableRotation;
-        GetComponent<PlayerSlideAttacker>().OnTurretFired -= EnableRotation;
+        #endregion
 
-        InputSwitchHandler.Instance.OnInputStyleSelect -= InputStyleSelectHandler;
-    }
 
-    private IEnumerator HandleInputListeners()
-    {
-        if (!InputSwitchHandler.Instance) yield return null;
 
-        InputSwitchHandler.Instance.OnInputStyleSelect += InputStyleSelectHandler;
-    }
+        #region Unity Events
 
-    private void InputStyleSelectHandler(int inputStyle)
-    {
-        this.inputStyle = inputStyle;
-
-        if (this.inputStyle == 2)
+        private void Start()
         {
-            SetTurretToFixedRotation();
+            // Initialize target rotation to the current rotation of the turret head
+            targetRotation = turretHead.rotation;
+            cannonPivotRotation = turretPivot.rotation;
         }
-    }
 
-    private void HorizontalTouchDragHandler(int touchDragDirection)
-    {
-        if (!isHorizontalRotationActive) return;
-
-        RotateTurretHead(touchDragDirection);
-    }
-
-    public void RotateTurretHead(float angle)
-    {
-        if (!isHorizontalRotationActive) return;
-
-        // implements smooth rotation, or lerp rotation, or normal rotation
-        //TODO: delete two other implementations not used
-        if (isSmoothImplemented)
+        private void OnEnable()
         {
-            float targetAngle = currentYAngle + angle * rotationSpeed;
-            currentYAngle = Mathf.SmoothDampAngle(currentYAngle, targetAngle, ref yVelocity, smoothTime);
+            PlayerController.onHorizontalTouchDrag += HorizontalTouchDragHandler;
+            PlayerController.onVerticalTouchDrag += VerticalTouchDragHandler;
 
-            turretHead.rotation = Quaternion.Euler(0, currentYAngle, 0);
+            GetComponent<PlayerAttacker>().OnTurretPowering += DisableRotation;
+            GetComponent<PlayerAttacker>().OnTurretFired += EnableRotation;
+            GetComponent<PlayerSlideAttacker>().OnTurretPowering += DisableRotation;
+            GetComponent<PlayerSlideAttacker>().OnTurretFired += EnableRotation;
+
+            StartCoroutine(HandleInputListeners());
         }
-        else if(isLerpImplemented)
+
+        private void OnDisable()
         {
-            /*targetRotation = Quaternion.Euler(0, angle, 0);
-            turretHead.rotation = Quaternion.Lerp(turretHead.rotation, targetRotation, rotationLerpTime);*/
+            PlayerController.onHorizontalTouchDrag -= HorizontalTouchDragHandler;
+            PlayerController.onVerticalTouchDrag -= VerticalTouchDragHandler;
 
+            GetComponent<PlayerAttacker>().OnTurretPowering -= DisableRotation;
+            GetComponent<PlayerAttacker>().OnTurretFired -= EnableRotation;
+            GetComponent<PlayerSlideAttacker>().OnTurretPowering -= DisableRotation;
+            GetComponent<PlayerSlideAttacker>().OnTurretFired -= EnableRotation;
 
-            // Calculate target rotation based on the angle
-            float yRotation = turretHead.eulerAngles.y + angle * rotationSpeed * Time.deltaTime;
-            targetRotation = Quaternion.Euler(0, yRotation, 0);
-
-            // Smoothly interpolate to the target rotation
-            turretHead.rotation = Quaternion.Slerp(turretHead.rotation, targetRotation, rotationLerpTime);
+            InputSwitchHandler.Instance.OnInputStyleSelect -= InputStyleSelectHandler;
         }
-        else
+        #endregion
+
+        private IEnumerator HandleInputListeners()
         {
-            turretHead.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime * angle));
+            if (!InputSwitchHandler.Instance) yield return null;
+
+            InputSwitchHandler.Instance.OnInputStyleSelect += InputStyleSelectHandler;
         }
-        
-    }
 
-    private void VerticalTouchDragHandler(int touchDragDirection)
-    {
-        if (inputStyle != 1) return;
-
-        if (touchDragDirection > 0)
+        private void InputStyleSelectHandler(int inputStyle)
         {
-            RaiseTurretPivot();
+            this.inputStyle = inputStyle;
+
+            if (this.inputStyle == 2)
+            {
+                SetTurretToFixedRotation();
+            }
         }
-        else
+
+        private void HorizontalTouchDragHandler(int touchDragDirection)
         {
-            LowerTurretPivot();
+            if (!isHorizontalRotationActive) return;
+
+            RotateTurretHead(touchDragDirection);
         }
-    }
 
-    public void RaiseTurretPivot()
-    {
-        float angleX = 360 - turretPivot.eulerAngles.x;
-
-        if (angleX <= maxPitchAngle || angleX >= 360 - maxPitchAngle)
+        public void RotateTurretHead(float direction)
         {
-            turretPivot.Rotate(Vector3.right * (-pitchSpeed * Time.deltaTime));
+            if (!isHorizontalRotationActive) return;
+
+            // implements smooth rotation, or lerp rotation, or normal rotation
+            //TODO: delete two other implementations not used
+
+            if (isSmoothImplemented)
+            {
+                float targetAngle = currentYAngle + direction * rotationSpeed;
+                currentYAngle = Mathf.SmoothDampAngle(currentYAngle, targetAngle, ref yVelocity, smoothTime);
+
+                turretHead.rotation = Quaternion.Euler(0, currentYAngle, 0);
+            }
+            else if(isLerpImplemented)
+            {
+                /*targetRotation = Quaternion.Euler(0, angle, 0);
+                turretHead.rotation = Quaternion.Lerp(turretHead.rotation, targetRotation, rotationLerpTime);*/
+
+
+                // Calculate target rotation based on the angle
+                float yRotation = turretHead.eulerAngles.y + direction * rotationSpeed * Time.deltaTime;
+                targetRotation = Quaternion.Euler(turretHead.eulerAngles.x, yRotation, turretHead.eulerAngles.z);
+
+                // Smoothly interpolate to the target rotation
+                turretHead.rotation = Quaternion.Slerp(turretHead.rotation, targetRotation, rotationLerpTime);
+            }
+            else
+            {
+                turretHead.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime * direction));
+            }
+
+            //var targetPivotRot = new Vector3(turretPivot.eulerAngles.x, 0, 0);
+            //turretPivot.rotation = Quaternion.Euler(targetPivotRot);
         }
-    }
 
-    public void LowerTurretPivot()
-    {
-        float angleX = 360 - turretPivot.eulerAngles.x;
-
-        if (angleX > 180 || angleX <= Mathf.Abs(minPitchAngle))
+        private void VerticalTouchDragHandler(int touchDragDirection)
         {
-            turretPivot.Rotate(Vector3.right * (pitchSpeed * Time.deltaTime));
+            if (inputStyle != 1) return;
+
+            if (touchDragDirection > 0)
+            {
+                RaiseTurretPivot();
+            }
+            else
+            {
+                LowerTurretPivot();
+            }
         }
-    }
 
-    private void SetTurretToFixedRotation()
-    {
-        // turretPivot.Rotate(-25, 0, 0);
-        turretPivot.RotateAround(turretPivot.localPosition, Vector3.right, -25);
-        // var rot = Quaternion.Euler(FixedTurretRotation, 0, 0);
-        //
-        // turretPivot.SetPositionAndRotation(turretPivot.transform.localPosition, rot);
-    }
+        public void RaiseTurretPivot()
+        {
+            if (turretPivot.eulerAngles.x <= 180 || turretPivot.localEulerAngles.x >= 360 - maxPitchAngle)
+            {
+                // Calculate target rotation based on the angle
+                float xRotation = turretPivot.eulerAngles.x - (pitchSpeed * Time.deltaTime);
+                cannonPivotRotation = Quaternion.Euler(xRotation, turretPivot.eulerAngles.y, turretPivot.eulerAngles.z);
+                
+                // Smoothly interpolate to the target rotation
+                turretPivot.rotation = Quaternion.Slerp(turretPivot.rotation, cannonPivotRotation, rotationLerpTime);
+            }
+            
+            // Clamp rotation
+            Vector3 turrenEulerAngles = turretPivot.rotation.eulerAngles;
+            turrenEulerAngles.x = (turrenEulerAngles.x < 360 - maxPitchAngle && turrenEulerAngles.x > 180) ? 360 - maxPitchAngle : turrenEulerAngles.x;
+            turretPivot.rotation = Quaternion.Euler(turrenEulerAngles);
+        }
+
+        public void LowerTurretPivot()
+        {
+            if (turretPivot.eulerAngles.x <= Mathf.Abs(minPitchAngle) || turretPivot.eulerAngles.x > 180)
+            {
+                 // Calculate target rotation based on the angle
+                 float xRotation = turretPivot.eulerAngles.x + (pitchSpeed * Time.deltaTime);
+                 cannonPivotRotation = Quaternion.Euler(xRotation, turretPivot.eulerAngles.y, turretPivot.eulerAngles.z);
+
+                 // Smoothly interpolate to the target rotation
+                 turretPivot.rotation = Quaternion.Slerp(turretPivot.rotation, cannonPivotRotation, rotationLerpTime);
+            }
+            
+            // Clamp rotation
+            Vector3 turrenEulerAngles = turretPivot.rotation.eulerAngles;
+            turrenEulerAngles.x = (turrenEulerAngles.x > Mathf.Abs(minPitchAngle) && turrenEulerAngles.x < 180) ? Mathf.Abs(minPitchAngle) : turrenEulerAngles.x;
+            turretPivot.rotation = Quaternion.Euler(turrenEulerAngles);
+        }
+
+        private void SetTurretToFixedRotation()
+        {
+            // turretPivot.Rotate(-25, 0, 0);
+            
+            //turretPivot.RotateAround(turretPivot.localPosition, Vector3.right, -25);
+            
+            
+            // var rot = Quaternion.Euler(FixedTurretRotation, 0, 0);
+            //
+            // turretPivot.SetPositionAndRotation(turretPivot.transform.localPosition, rot);
+        }
 
 
-    private void DisableRotation()
-    {
-        isHorizontalRotationActive = false;
-    }
+        private void DisableRotation()
+        {
+            isHorizontalRotationActive = false;
+        }
 
-    private void EnableRotation()
-    {
-        isHorizontalRotationActive = true;
-    }
+        private void EnableRotation()
+        {
+            isHorizontalRotationActive = true;
+        }
+    }    
 }

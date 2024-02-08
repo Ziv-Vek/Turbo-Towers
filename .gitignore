@@ -73,3 +73,17 @@ crashlytics-build.properties
 Assets/TextMesh Pro/*
 Assets/TextMesh Pro.meta
 Assets/AssetPacks/*
+Assets/LowlyPoly/*
+Packages/com.singularitygroup.hotreload/*
+Assets/TerrainSampleAssets/*
+Assets/Behavior Designer/*
+Assets/Behavior Designer Movement/*
+Assets/Behavior Designer Samples/*
+Assets/Behavior Designer Tactical/*
+Assets/Behavior Designer Movement.meta
+Assets/Behavior Designer Samples.meta
+Assets/Behavior Designer Tactical.meta
+Assets/Behavior Designer.meta
+Assets/Plugins/Demigiant/*
+Assets/Plugins/Easy Save 3/*
+Assets/Plugins/Sirenix/*

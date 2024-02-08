@@ -1,15 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class CameraRotator : MonoBehaviour
 {
-    [SerializeField] Transform turret; // The stationary turret
+    // Config:
     [SerializeField] float smoothSpeed = 0.125f; // Adjust for smoother movement
+    [SerializeField] private CameraConfigSO cameraConfig;
     
+    // Caching:
+    private Transform turret; // The stationary turret
     private Vector3 offset; // Offset from the turret
     private float fixedHeightDifference; // Fixed height difference from the turret
 
+    private void Awake()
+    {
+        turret = GameObject.FindWithTag("Player").transform.Find("Head").transform.Find("Head_Rot");
+    }
 
     private void Start()
     {
@@ -32,4 +40,40 @@ public class CameraRotator : MonoBehaviour
         // Make sure the camera always faces the same direction as the turret
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, turret.eulerAngles.y, turret.eulerAngles.z), smoothSpeed);
     }
+
+#if UNITY_EDITOR
+    public void SetOffset()
+    {
+        cameraConfig.SetOffset(offset);
+    }
+    
+    public void SetRotation()
+    {
+        cameraConfig.SetRotation(transform.rotation);
+    }
+#endif
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(CameraRotator))]
+public class CameraEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI(); // Draws the default inspector
+
+        CameraRotator cameraRotator = (CameraRotator)target;
+
+        if (GUILayout.Button("Set New Offset"))
+        {
+            cameraRotator.SetOffset();
+        }
+    
+        if (GUILayout.Button("Set New Rotation"))
+        {
+            cameraRotator.SetOffset();
+        }
+    }
+}
+#endif
+

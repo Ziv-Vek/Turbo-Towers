@@ -1,4 +1,4 @@
-namespace Enemy.Models
+namespace TurboTowers.Enemy.Models
 {
     public enum EnemyAction
     {

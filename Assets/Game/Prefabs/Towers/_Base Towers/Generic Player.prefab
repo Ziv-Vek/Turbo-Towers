@@ -95,13 +95,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7713379831807869329, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
+      propertyPath: myType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7713379831807869329, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
       propertyPath: baseHealth
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7713379831807869329, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
       propertyPath: currentHealth
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 64069636836320599, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
@@ -283,6 +288,11 @@ PrefabInstance:
       propertyPath: m_ExcludeLayers.m_Bits
       value: 129
       objectReference: {fileID: 0}
+    - target: {fileID: 4200788285758573900, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2f5d9ec8d7c2cc644aab78a3aacee199, type: 2}
     - target: {fileID: 5380775930295509670, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
       propertyPath: m_Layer
@@ -443,6 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1302cd3e77af6844a7c5c0c9afcb66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputStyle: 0
   touchDragDeadZone: 13
   minAngleToPowerup: 60
   maxAngleToRotate: 65
@@ -490,6 +501,7 @@ MonoBehaviour:
   projectile: {fileID: 2392546921861959902, guid: 1be46dfb9fdfd0a41b5ebbc612dd48c0,
     type: 3}
   trajectoryLine: {fileID: 5016143254431372509}
+  cooldownTime: 1
 --- !u!114 &5016143254431372509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,6 +573,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portalPrefab: {fileID: 6953707053049541938, guid: d6b353cef89e82148a9d82819af6e1e6,
     type: 3}
+  isReactivatingPortals: 0
+  baseTransform: {fileID: 1396207817966335864}
+  delayForTeleportationAfterKill: 0.7
+  delayForTeleportationToPortal: 0.3
 --- !u!4 &1091299829874456076 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3326178131483390860, guid: f87dd30049bb5a541b156bae6a77ac27,
@@ -570,6 +586,12 @@ Transform:
 --- !u!4 &1256557898280418301 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3494185051985690237, guid: f87dd30049bb5a541b156bae6a77ac27,
+    type: 3}
+  m_PrefabInstance: {fileID: 2381812710949062016}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1396207817966335864 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3633760131870667512, guid: f87dd30049bb5a541b156bae6a77ac27,
     type: 3}
   m_PrefabInstance: {fileID: 2381812710949062016}
   m_PrefabAsset: {fileID: 0}

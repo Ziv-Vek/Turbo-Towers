@@ -3,6 +3,7 @@ using UnityEngine;
 using BehaviorDesigner.Runtime.Tasks;
 using Sirenix.OdinInspector;
 using TurboTowers.Map;
+using TurboTowers.Map.Models;
 using TurboTowers.Turrets.Combat;
 using TurboTowers.Turrets.Common;
 
@@ -25,7 +26,7 @@ public class ShootAtTarget : Action
     public event System.Action OnTurretPowering;
     public event System.Action OnTurretFired;
           
-    public System.Action<int> OnTurretHit;
+    public System.Action<int, PointType> OnTurretHit;
     #endregion
     
     public override void OnStart()
@@ -52,9 +53,13 @@ public class ShootAtTarget : Action
         return TaskStatus.Success;
     }
     
-    private void HandleHit(int damagePerformed)
+    private void HandleHit(int damagePerformed, PointType pointType)
     {
-        GetComponent<Health>().GainHealth(damagePerformed);
+        if (pointType == PointType.Enemy)
+        {
+            GetComponent<Health>().GainHealth(damagePerformed);    
+        }
+        
         OnTurretHit = null;
     }
 

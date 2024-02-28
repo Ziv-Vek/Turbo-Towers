@@ -7,18 +7,33 @@ public class CameraConfigSO : ScriptableObject
 {
     public Vector3 baseOffsetFromPlayer;
     public Quaternion baseRotation;
+    public float fixedHighDifference;
     
-    public void SetOffset(Vector3 offset)
+    public void SetOffset(ref OffsetData offset)
     {
         Debug.Log("Setting offset to " + offset);
-        baseOffsetFromPlayer = offset;
+        baseOffsetFromPlayer = offset.posOffset;
+        baseRotation = offset.rotation;
+        fixedHighDifference = offset.heightDifference;
     }
     
-    public void SetRotation(Quaternion rotation)
+    public OffsetData GetOffset()
     {
-        Debug.Log("Setting rotation to " + rotation);
-        baseRotation = rotation;
+        return new OffsetData(baseOffsetFromPlayer, baseRotation, fixedHighDifference);
     }
     
+    public Vector3 GetOffsetPosition()
+    {
+        return baseOffsetFromPlayer;
+    }
     
+    public Quaternion GetOffsetRotation()
+    {
+        return baseRotation;
+    }
+    
+    public float GetOffsetHeightDifference()
+    {
+        return fixedHighDifference;
+    }
 }

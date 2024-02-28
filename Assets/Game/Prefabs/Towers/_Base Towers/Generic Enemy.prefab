@@ -65,6 +65,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7901729015351533494, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
+      propertyPath: startWhenEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7901729015351533494, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
+      propertyPath: pauseWhenDisabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7901729015351533494, guid: f87dd30049bb5a541b156bae6a77ac27,
+        type: 3}
       propertyPath: resetValuesOnRestart
       value: 0
       objectReference: {fileID: 0}

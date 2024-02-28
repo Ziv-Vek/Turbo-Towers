@@ -1,42 +1,52 @@
 using System;
+using JetBrains.Annotations;
+using TurboTowers.Core;
 using TurboTowers.Map;
 using TurboTowers.Map.Models;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
-public class Portal : MonoBehaviour, ITargetable
+namespace TurboTowers.Movement
 {
-    public UnityEvent OnReachedPortal; 
-    
-    public void ActivatePortal()
+    public class Portal : MonoBehaviour, ITargetable
     {
-        GetComponent<Collider>().enabled = true;
-        GetComponentInChildren<Renderer>().enabled = true;
-    }
+        public UnityEvent<GameState> OnReachedPortal;
 
-    public void DeactivatePortal()
-    {
-        GetComponent<Collider>().enabled = false;
-        GetComponentInChildren<Renderer>().enabled = false;
-        
-        OnReachedPortal?.Invoke();
-    }
+        [Tooltip("Initialize this next state when player reaches the portal")]
+        public GameState nextState;
 
-    private void OnDisable()
-    {
-        if (OnReachedPortal != null)
+        public void ActivatePortal()
         {
-            OnReachedPortal = null;
+            GetComponent<Collider>().enabled = true;
+            GetComponentInChildren<Renderer>().enabled = true;
         }
-    }
 
-    public int GetCurrentHealth()
-    {
-        return 1;
-    }
+        public void DeactivatePortal()
+        {
+            GetComponent<Collider>().enabled = false;
+            GetComponentInChildren<Renderer>().enabled = false;
 
-    public bool IsAlive()
-    {
-        return true;
+            if (nextState != null && OnReachedPortal != null)
+                OnReachedPortal.Invoke(nextState);
+        }
+
+        private void OnDisable()
+        {
+            if (OnReachedPortal != null)
+            {
+                OnReachedPortal = null;
+            }
+        }
+
+        public int GetCurrentHealth()
+        {
+            return 1;
+        }
+
+        public bool IsAlive()
+        {
+            return true;
+        }
     }
 }

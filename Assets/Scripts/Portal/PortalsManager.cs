@@ -1,4 +1,5 @@
 ﻿using System;
+using TurboTowers.Movement;
 using UnityEngine;
 
 public class PortalsManager : MonoBehaviour
@@ -46,8 +47,8 @@ public class PortalsManager : MonoBehaviour
         }
     }
 
-    public void SpawnPortal(Vector3 position)
+    public Portal SpawnPortal(Vector3 position)
     {
-        Instantiate(portalPrefab, position, Quaternion.identity);
+        return (Instantiate(portalPrefab, position, Quaternion.identity) as GameObject).GetComponent<Portal>();
     }
 }

@@ -40,7 +40,7 @@ namespace TurboTowers.Map.Models
         
         public void RemoveBodyPart(BodyPart bodyPart)
         {
-            Debug.Log(BodyParts!.Remove(bodyPart));
+            BodyParts!.Remove(bodyPart);
         }
         
         public void AddBodyPart(BodyPart bodyPart)

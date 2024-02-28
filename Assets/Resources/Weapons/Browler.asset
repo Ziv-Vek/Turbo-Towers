@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Browler
   m_EditorClassIdentifier: 
   baseRange:
-  - 55
-  - 57
-  - 59
+  - 90
+  - 94
+  - 98
   baseDamage: 010000000100000001000000
   cooldown: 3

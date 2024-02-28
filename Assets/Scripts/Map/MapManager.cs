@@ -1,10 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using DrawXXL;
 using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using TurboTowers.Map.Models;
+using TurboTowers.Turrets.Combat;
 using TurboTowers.Turrets.Common;
 using UnityEngine;
+using TurboTowers.Movement;
 
 namespace TurboTowers.Map
 {
@@ -16,7 +20,9 @@ namespace TurboTowers.Map
         private readonly Dictionary<Vector2, MapPoint> _mapPoints = new();
         [ShowInInspector] public Dictionary<ITargetable, TargetablePoint> _targetPoints = new();
         [ShowInInspector] public Dictionary<Health, TowerPoint> targetTowers = new();
-        
+
+        private GameObject player;
+
         public event Action OnBossDeath;
 
         #region Unity Events
@@ -29,6 +35,11 @@ namespace TurboTowers.Map
             }
 
             _instance = this;
+        }
+
+        private void Start()
+        {
+            player = GameObject.FindWithTag("Player");
         }
 
         #endregion
@@ -68,12 +79,20 @@ namespace TurboTowers.Map
 
         public void UnRegisterPoint(Health target)
         {
-            if (targetTowers[target].Type == PointType.Enemy || targetTowers[target].Type == PointType.Player)
+            if (targetTowers[target].Type == PointType.Enemy)
             {
-                PortalsManager.Instance.SpawnPortal(targetTowers[target].BasePosition);
+                var newPortal = PortalsManager.Instance.SpawnPortal(targetTowers[target].BasePosition);
+                newPortal.DeactivatePortal();
                 
                 targetTowers[target].Type = PointType.Portal;
                 targetTowers[target].RemoveAllParts();
+                
+                TeleportToPortal(newPortal);
+            }
+            
+            if (targetTowers[target].Type == PointType.Player)
+            {
+                //TODO: Implement game over logic
             }
 
             if (targetTowers[target].Type == PointType.Boss)
@@ -210,5 +229,20 @@ namespace TurboTowers.Map
 
             return enemyPlayers;
         }*/
+
+
+        #region Private Methods  
+
+        private void TeleportToPortal(Portal newPortal)
+        {
+            if (newPortal == null) return;
+            
+            if (player.TryGetComponent(out TeleportationController teleportationController))
+            {
+                StartCoroutine(teleportationController.Teleport(newPortal,true));
+            }
+        }
+
+        #endregion
     }
 }

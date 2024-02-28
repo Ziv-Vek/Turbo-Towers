@@ -32,11 +32,4 @@ public class IsTargetInRange : Conditional
             return TaskStatus.Running;
         }
     }
-
-    public override void OnDrawGizmos()
-    {
-        base.OnDrawGizmos();
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, weaponStatsSO.Value.GetBaseRange(0));
-    }
 }

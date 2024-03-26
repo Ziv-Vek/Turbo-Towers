@@ -8,7 +8,7 @@ namespace TurboTowers.Core
         public static GameManager Instance { get; private set; }
         public static event Action<GameState> OnGameStateChanged;
         public GameState initialLevelState = GameState.InGameCutscene;
-        
+        public LevelType levelType = LevelType.KillBoss;
         private GameState currentGameState = GameState.Null;
 
         private void Awake()
@@ -16,7 +16,7 @@ namespace TurboTowers.Core
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                //DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -50,6 +50,7 @@ namespace TurboTowers.Core
                 case GameState.InGameBoss:
                     break;
                 case GameState.Victory:
+                    Debug.Log("Victory!");
                     HandleVictory();
                     break;
                 case GameState.Defeat:
@@ -80,6 +81,12 @@ namespace TurboTowers.Core
         {
             SetGameState(GameState.InGame);
         }
+        
+        public void HandleAllTowersKilled()
+        {
+            if (levelType == LevelType.KillAllTowers)
+                SetGameState(GameState.Victory);
+        }
     }
 
     public enum GameState
@@ -93,5 +100,12 @@ namespace TurboTowers.Core
         InGameSettings,
         InGameCutscene,
         Null
+    }
+    
+    public enum LevelType
+    {
+        KillAllTowers,
+        KillBoss,
+        TimeTrial,
     }
 }

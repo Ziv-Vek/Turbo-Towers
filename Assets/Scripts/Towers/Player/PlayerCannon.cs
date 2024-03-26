@@ -1,12 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TurboTowers.Core;
+using TurboTowers.Turrets.Common;
 using UnityEngine;
 using TurboTowers.Turrets.Controls;
+using UnityEngine.InputSystem;
 
 namespace TurboTowers.Turrets.Combat
 {
     public class PlayerCannon: MonoBehaviour
     {
+        [Header("Touch Config:")]
+        [Space(10)]
+        [SerializeField] private float touchDragDeadZone = 5f;
+        [SerializeField] private float minVerticalDelta = 2f;
+        
         [Space(10)]
         [Header("Projectile Shoot Out")]
 
@@ -57,29 +66,84 @@ namespace TurboTowers.Turrets.Combat
         [SerializeField] private LayerMask CollidableLayers;
 
         Collider[] colliders;
+        
+        // Touch variables:
+        private bool isTouching = false;
+        private bool isTowerControlEnabled = true;
+        private Vector2 previousTouchPos;
+        
+        // Touch cached ref:
+        private Coroutine inputDragCoroutine;
+        
+        private PlayerInput playerInput;
+        private InputAction touchPositionAction;
+        private InputAction touchPressAction;
+
+        private void Awake()
+        {
+            playerInput = GetComponent<PlayerInput>();
+            touchPressAction = playerInput.actions.FindAction("TouchPress");
+            touchPositionAction = playerInput.actions["TouchPosition"];
+        }
+
+        private void OnEnable()
+        {
+            touchPressAction.performed += TouchPressed;
+            touchPressAction.canceled += TouchCanceled;
+            touchPressAction.started += TouchStarted;
+            
+            //GetComponentInParent<Health>().OnDeath += OnPlayerDeath;
+            GameManager.OnGameStateChanged += OnGameStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            touchPressAction.performed += TouchPressed;
+            touchPressAction.canceled -= TouchCanceled;
+            touchPressAction.started -= TouchStarted;
+             
+            //GetComponentInParent<Health>().OnDeath -= OnPlayerDeath;
+            GameManager.OnGameStateChanged -= OnGameStateChanged;
+        }
 
         private void Start()
         {
             canShoot = true;
         }
-
-        private void Update()
+        
+        private void OnGameStateChanged(GameState newGameState)
         {
-            if (Input.GetButton("Fire1") && canShoot)
-            {
-                float VericalRotation = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
-                float HorizontalRotation = Input.GetAxis("Mouse Y") * -sensitivity * Time.deltaTime;
+            isTowerControlEnabled = newGameState is GameState.InGame or GameState.InGameBoss;
+        }
+        
+        private void TouchStarted(InputAction.CallbackContext obj)
+        {
+            //Debug.Log("started");
+        }
+        
+        void TouchPressed(InputAction.CallbackContext context)
+        {
+            Debug.Log("touch started");
+            if (!isTowerControlEnabled) return;
+            
+            Vector2 startTouchPos = touchPositionAction.ReadValue<Vector2>();
+            previousTouchPos = startTouchPos;
+            
+            isTouching = true;
+            
+            // onTouchStarted?.Invoke(startTouchPos);
+            
+            StartCoroutine(TouchDrag(startTouchPos));
+        }
+        
+        void TouchCanceled(InputAction.CallbackContext context)
+        {
+            if (!isTowerControlEnabled) return;
+            
+            isTouching = false;
+            //onTouchEnded?.Invoke();
 
-                RotatedVerticallyObj.rotation = Quaternion.Euler(RotatedVerticallyObj.rotation.eulerAngles.x, RotatedVerticallyObj.rotation.eulerAngles.y + VericalRotation * rotationSpeed, RotatedVerticallyObj.rotation.eulerAngles.z);
-                RotatedHorizontallyObj.rotation = Quaternion.Euler(RotatedHorizontallyObj.rotation.eulerAngles.x, RotatedHorizontallyObj.rotation.eulerAngles.y, RotatedHorizontallyObj.rotation.eulerAngles.z + HorizontalRotation * rotationSpeed);
-
-                if (enableProjectionLine)
-                {
-                    lineRenderer.enabled = true;
-                    contactPoint.gameObject.SetActive(true);
-                }
-            }
-            else if (Input.GetButtonUp("Fire1") && canShoot)
+            if (canShoot)
             {
                 if (enableProjectionLine)
                 {
@@ -89,7 +153,106 @@ namespace TurboTowers.Turrets.Combat
                 canShoot = false;
                 StartCoroutine(ShootProjectile());
             }
+            
+        }
+        
+        IEnumerator TouchDrag(Vector2 startTouchPos)
+        {
+            float verticalAngle;
+            float horizontalAngle;
+            
+            var currentTouchPos = new Vector2();
+            
+            while (isTouching)
+            {
+                currentTouchPos = touchPositionAction.ReadValue<Vector2>();
 
+                int dragDirectionX = 0;
+                int dragDirectionY = 0;
+                    
+                if (currentTouchPos.x - previousTouchPos.x < touchDragDeadZone)
+                {
+                    dragDirectionX = 0;
+                }
+                else
+                {
+                    dragDirectionX = currentTouchPos.x > previousTouchPos.x ? 1 : -1;
+                }
+                
+                if (currentTouchPos.y - previousTouchPos.y < touchDragDeadZone)
+                {
+                    dragDirectionY = 0;
+                }
+                else
+                {
+                    dragDirectionY = currentTouchPos.y > previousTouchPos.y ? 1 : -1;
+                }
+
+                //Debug.Log(dragDirectionX == 1 ? "Right" : "Left");
+                // Debug.Log(dragDirectionY == 1 ? "Up" : "Down");
+                
+                
+                float VericalRotation = dragDirectionX * sensitivity * Time.deltaTime;
+                float HorizontalRotation = dragDirectionY * -sensitivity * Time.deltaTime;
+
+                RotatedVerticallyObj.rotation = Quaternion.Euler(RotatedVerticallyObj.rotation.eulerAngles.x, RotatedVerticallyObj.rotation.eulerAngles.y + VericalRotation * rotationSpeed, RotatedVerticallyObj.rotation.eulerAngles.z);
+                RotatedHorizontallyObj.rotation = Quaternion.Euler(RotatedHorizontallyObj.rotation.eulerAngles.x, RotatedHorizontallyObj.rotation.eulerAngles.y, RotatedHorizontallyObj.rotation.eulerAngles.z + HorizontalRotation * rotationSpeed);
+
+                if (enableProjectionLine)
+                {
+                    lineRenderer.enabled = true;
+                    contactPoint.gameObject.SetActive(true);
+                }
+                
+                
+                
+                //(bool isOutsideOfDeadzone, bool isVerticalDeltaEnough) = IsOutsideMinimalDrag(startTouchPos, currentTouchPos);
+                 
+                //horizontalAngle = Mathf.Atan2(currentTouchPos.y - startTouchPos.y, currentTouchPos.x - startTouchPos.x) * 180 / Mathf.PI;
+                //horizontalAngle = Mathf.Atan2(currentTouchPos.y - previousTouchPos.y, currentTouchPos.x - previousTouchPos.x) * 180 / Mathf.PI;
+                //Debug.Log(angle.ToString());
+                 
+                 
+                // Calculate direction vector from previous to current touch position
+                //Vector2 direction = currentTouchPos - previousTouchPos;
+
+                // Normalize the direction
+                //direction.Normalize();
+                
+                // Calculate the angle in radians and then convert to degrees
+                //verticalAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                
+                // Normalize angle to 0 to 360 degrees if needed
+                //if (angle < 0) angle += 360;
+                 
+                 
+                /*if (isVerticalDeltaEnough)
+                    HandleVerticalDragActionByTouchAngle(verticalAngle, currentTouchPos.y);
+                if (isOutsideOfDeadzone)
+                    //HandleHorizontalDragActionByTouchDelta(direction.x);
+                    HandelHorizontalActionByTouchAngle(horizontalAngle);*/
+
+                previousTouchPos = currentTouchPos;
+                 
+                yield return null;
+            }
+        }
+        
+        private (bool, bool) IsOutsideMinimalDrag(Vector2 startTouchPos, Vector2 currentTouchPos)
+        {
+            var isOutsideDeadzone = Vector2.Distance(startTouchPos, currentTouchPos) > touchDragDeadZone;
+            var isVerticalDeltaEnough = Mathf.Abs(Mathf.Abs(currentTouchPos.y) - Mathf.Abs(previousTouchPos.y)) > minVerticalDelta;
+
+            return (isOutsideDeadzone, isVerticalDeltaEnough);
+        }
+        
+        private void OnPlayerDeath()
+        {
+            GameManager.Instance.SetGameState(GameState.Defeat);
+        }
+
+        private void Update()
+        {
             if (!enableProjectionLine)
                 return;
 

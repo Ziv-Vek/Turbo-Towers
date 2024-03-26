@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DrawXXL;
 using JetBrains.Annotations;
 using Sirenix.OdinInspector;
+using TurboTowers.Core;
 using TurboTowers.Map.Models;
 using TurboTowers.Turrets.Combat;
 using TurboTowers.Turrets.Common;
@@ -86,8 +87,11 @@ namespace TurboTowers.Map
                 
                 targetTowers[target].Type = PointType.Portal;
                 targetTowers[target].RemoveAllParts();
+                //targetTowers.Remove(target);
                 
                 TeleportToPortal(newPortal);
+                
+                if (!AreRemainingTowers()) GameManager.Instance.HandleAllTowersKilled();
             }
             
             if (targetTowers[target].Type == PointType.Player)
@@ -100,6 +104,21 @@ namespace TurboTowers.Map
                 Debug.Log("Boss killed!");
                 OnBossDeath?.Invoke();
             }
+        }
+        
+        
+
+        /** Checks if there are any remaining towers (enemies) in the map (boss inclusive).
+         * Returns - true if at least one enemy is alive, otherwise returns false */
+        private bool AreRemainingTowers()
+        {
+            Dictionary<Health, TowerPoint>.ValueCollection pointsValues = targetTowers.Values;
+            foreach (var towerPoint in pointsValues)
+            {
+                if (towerPoint.Type == PointType.Enemy) return true;
+            }
+            
+            return false;
         }
 
         public void RemoveDamageablePartFromPoint(Health targetableHealth, BodyPart damageablePartToRemove)

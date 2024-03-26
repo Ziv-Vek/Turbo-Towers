@@ -5,16 +5,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TurboTowers.Turrets.Controls;
+using TurboTowers.Turrets.Movement;
 
 namespace TurboTowers.Turrets.Combat
 {
-    public class HoldClickableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class HoldClickableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
         #region Variables
 
         [SerializeField] private float _holdDuration;
+        [SerializeField] private Color32 unpressedColor;
+        [SerializeField] private Color32 pressedColor;
 
         private float minPressDuration = 0.2f;
+        private Color color;
 
         public float MinPressDuration
         {
@@ -30,7 +34,9 @@ namespace TurboTowers.Turrets.Combat
         private bool _isHoldingButton;
         private float _elapsedTime;
         private bool _isBtnEnabled = true;
-
+        private PlayerController _playerController;
+        private TouchManager _touchManager;
+        
         #endregion
 
         #region EVENTS
@@ -43,6 +49,18 @@ namespace TurboTowers.Turrets.Combat
         #endregion
 
         #region Unity Events
+
+        private void Start()
+        {
+            color = GetComponent<Image>().color;
+            _playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+            
+            _touchManager = GameObject.FindWithTag("Player")?.GetComponent<TouchManager>();
+            if (GameObject.FindWithTag("Player").GetComponent<PlayerController>()?.inputStyle == InputStyle.Fourth)
+            {
+                this.enabled = false;
+            }
+        }
 
         private void OnEnable()
         {
@@ -99,7 +117,11 @@ namespace TurboTowers.Turrets.Combat
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!_isBtnEnabled) return;
-
+            color = pressedColor;
+            _playerController.SetTouchControlEnabled(false);
+            if (_touchManager)
+                _touchManager.SetTouchControlEnabled(false);
+            
             ToggleHoldingButton(true);
         }
 
@@ -108,6 +130,24 @@ namespace TurboTowers.Turrets.Combat
         {
             if (!_isBtnEnabled) return;
 
+            color = unpressedColor;
+            _playerController.SetTouchControlEnabled(true);
+            if (_touchManager)
+                _touchManager.SetTouchControlEnabled(true);
+            // every time button was released
+            ManageButtonInteraction(true);
+            ToggleHoldingButton(false);
+
+            OnClickUp?.Invoke();
+        }
+        
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (!_isBtnEnabled) return;
+            color = unpressedColor;
+            _playerController.SetTouchControlEnabled(true);
+            if (_touchManager)
+                _touchManager.SetTouchControlEnabled(true);
             // every time button was released
             ManageButtonInteraction(true);
             ToggleHoldingButton(false);
@@ -158,6 +198,11 @@ namespace TurboTowers.Turrets.Combat
         {
             // reached hold duration
             ToggleHoldingButton(false);
+
+            color = unpressedColor;
+            _playerController.SetTouchControlEnabled(true);
+            if (_touchManager)
+                _touchManager.SetTouchControlEnabled(true);
 
             OnHoldClickMaxed?.Invoke();
         }

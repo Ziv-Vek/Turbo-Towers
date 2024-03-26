@@ -28,10 +28,11 @@ namespace TurboTowers.Turrets.Common
             return bodyPartType;
         }
         
-        public void HandleHit(int damage, Action<int, PointType> onHit)
+        public void HandleHit(int damage, Action<int, PointType, BodyPartType?> onHit)
         {
+            Debug.Log("hit player");
             health.TakeDamage(damage, this);
-            onHit?.Invoke(damage, health.GetPointType());
+            onHit?.Invoke(damage, health.GetPointType(), bodyPartType);
         }
 
         public Quaternion GetRotation()

@@ -6,12 +6,30 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Prototyping/GameplayTesting control 1 style.unity
+    guid: 9c1fb011fb409204f963580eb7b59329
+  - enabled: 1
+    path: Assets/Scenes/Prototyping/GameplayTesting joystick.unity
+    guid: 0fe3e4633f9910b43b2a7a7a78e6e176
+  - enabled: 0
+    path: Assets/Scenes/Prototyping/GameplayTesting control 2 style.unity
+    guid: e79bee4b311b31949b772d22de53851d
+  - enabled: 1
+    path: Assets/Scenes/Prototyping/GameplayTesting control 2-2 style.unity
+    guid: 9d06b1d4632bb4a48807f4e597f5a650
+  - enabled: 0
+    path: Assets/Scenes/Prototyping/GameplayTesting projectile style.unity
+    guid: 05e34d596c98a6b44979654e75cbcc23
+  - enabled: 0
     path: Assets/Scenes/_MainMenu.unity
     guid: 82162eebac08a5f408e1bff781ed6975
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Tutorial.unity
     guid: 65988df345f2ad347a5c8667ce619a7b
-  - enabled: 1
-    path: Assets/Scenes/GameplayTesting.unity
+  - enabled: 0
+    path: Assets/Scenes/Prototyping/GameplayTesting Ball Proj.unity
     guid: 6a3c28acc67b88948a1f8cd83fdc80bd
+  - enabled: 0
+    path: Assets/Scenes/Prototyping/GameplayTesting Sheep Proj.unity
+    guid: d61473ec1cfa7ea40b57a47ecf20c46d
   m_configObjects: {}

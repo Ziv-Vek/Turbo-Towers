@@ -10,40 +10,38 @@ namespace TurboTowers.Turrets.Movement
     public class PlayerRotator : MonoBehaviour
     {
         #region Variables
-        [Space]
-        [SerializeField] public Transform turretHead;
+
+        [Space] [SerializeField] public Transform turretHead;
         [SerializeField] private float rotationSpeed = 5f;
         [SerializeField] private Transform turretPivot;
         [SerializeField] private float pitchSpeed = 15f;
         [SerializeField, Range(-90, 90)] private float maxPitchAngle = 60f;
         [SerializeField, Range(-45, 45)] private float minPitchAngle = 0;
         [SerializeField] private HoldClickableButton powerBtn;
-
+        [SerializeField] private Transform launchPoint;
+        
         private InputStyle inputStyle = InputStyle.First;
 
         private const float FixedTurretRotation = -25;
         private bool isHorizontalRotationActive = true;
 
-        [Header("Smooth Rotation")]
-        public bool isSmoothImplemented = true;
+        [Header("Smooth Rotation")] public bool isSmoothImplemented = true;
         private float currentYAngle = 0f;
         private float yVelocity = 0f;
         [SerializeField] float smoothTime = 0.3f;
 
-        [Header("Lerp Rotation")]
-        public bool isLerpImplemented = false;
+        [Header("Lerp Rotation")] public bool isLerpImplemented = false;
         [SerializeField] private float rotationLerpTime = 0.1f; // Time taken to reach the target rotation
         private Quaternion targetRotation;
         private Quaternion cannonPivotRotation;
 
         #endregion
 
-
-
         #region Unity Events
 
         private void Start()
         {
+            inputStyle = GetComponent<Controls.PlayerController>().inputStyle;
             // Initialize target rotation to the current rotation of the turret head
             targetRotation = turretHead.rotation;
             cannonPivotRotation = turretPivot.rotation;
@@ -74,6 +72,7 @@ namespace TurboTowers.Turrets.Movement
 
             InputSwitchHandler.Instance.OnInputStyleSelect -= InputStyleSelectHandler;
         }
+
         #endregion
 
         private IEnumerator HandleInputListeners()
@@ -100,6 +99,7 @@ namespace TurboTowers.Turrets.Movement
             RotateTurretHead(touchDragDirection);
         }
 
+
         public void RotateTurretHead(float direction)
         {
             if (!isHorizontalRotationActive) return;
@@ -114,7 +114,7 @@ namespace TurboTowers.Turrets.Movement
 
                 turretHead.rotation = Quaternion.Euler(0, currentYAngle, 0);
             }
-            else if(isLerpImplemented)
+            else if (isLerpImplemented)
             {
                 /*targetRotation = Quaternion.Euler(0, angle, 0);
                 turretHead.rotation = Quaternion.Lerp(turretHead.rotation, targetRotation, rotationLerpTime);*/
@@ -138,16 +138,70 @@ namespace TurboTowers.Turrets.Movement
 
         private void VerticalTouchDragHandler(int touchDragDirection)
         {
-            if (inputStyle != InputStyle.First) return;
+            if (inputStyle == InputStyle.Second) return;
 
-            if (touchDragDirection > 0)
+            if (inputStyle == InputStyle.First || inputStyle == InputStyle.Fourth)
             {
-                RaiseTurretPivot();
+                if (touchDragDirection > 0)
+                {
+                    RaiseTurretPivot();
+                }
+                else
+                {
+                    LowerTurretPivot();
+                }    
             }
-            else
+            else if (inputStyle == InputStyle.Third)
             {
-                LowerTurretPivot();
+                if (touchDragDirection > 0)
+                {
+                    RaiseLaunchPoint();
+                }
+                else
+                {
+                    LowerLaunchPoint();
+                }
             }
+        }
+
+        private void RaiseLaunchPoint()
+        {
+            if (launchPoint.eulerAngles.x <= 180 || launchPoint.localEulerAngles.x >= 360 - maxPitchAngle)
+            {
+                // Calculate target rotation based on the angle
+                float xRotation = launchPoint.eulerAngles.x - (pitchSpeed * Time.deltaTime);
+                cannonPivotRotation = Quaternion.Euler(xRotation, launchPoint.eulerAngles.y, launchPoint.eulerAngles.z);
+
+                // Smoothly interpolate to the target rotation
+                launchPoint.rotation = Quaternion.Slerp(launchPoint.rotation, cannonPivotRotation, rotationLerpTime);
+            }
+
+            // Clamp rotation
+            Vector3 turrenEulerAngles = launchPoint.rotation.eulerAngles;
+            turrenEulerAngles.x = (turrenEulerAngles.x < 360 - maxPitchAngle && turrenEulerAngles.x > 180)
+                ? 360 - maxPitchAngle
+                : turrenEulerAngles.x;
+            launchPoint.rotation = Quaternion.Euler(turrenEulerAngles);
+        }
+
+        private void LowerLaunchPoint()
+        {
+            if (launchPoint.eulerAngles.x <= Mathf.Abs(minPitchAngle) || launchPoint.eulerAngles.x > 180)
+            {
+                // Calculate target rotation based on the angle
+                float xRotation = launchPoint.eulerAngles.x + (pitchSpeed * Time.deltaTime);
+                cannonPivotRotation = Quaternion.Euler(xRotation, launchPoint.eulerAngles.y, launchPoint.eulerAngles.z);
+
+                // Smoothly interpolate to the target rotation
+                launchPoint.rotation = Quaternion.Slerp(launchPoint.rotation, cannonPivotRotation, rotationLerpTime);
+            }
+
+            // Clamp rotation
+            Vector3 turrenEulerAngles = launchPoint.rotation.eulerAngles;
+            turrenEulerAngles.x = (turrenEulerAngles.x > Mathf.Abs(minPitchAngle) && turrenEulerAngles.x < 180)
+                ? Mathf.Abs(minPitchAngle)
+                : turrenEulerAngles.x;
+            launchPoint.rotation = Quaternion.Euler(turrenEulerAngles);
         }
 
         public void RaiseTurretPivot()
@@ -157,42 +211,47 @@ namespace TurboTowers.Turrets.Movement
                 // Calculate target rotation based on the angle
                 float xRotation = turretPivot.eulerAngles.x - (pitchSpeed * Time.deltaTime);
                 cannonPivotRotation = Quaternion.Euler(xRotation, turretPivot.eulerAngles.y, turretPivot.eulerAngles.z);
-                
+
                 // Smoothly interpolate to the target rotation
                 turretPivot.rotation = Quaternion.Slerp(turretPivot.rotation, cannonPivotRotation, rotationLerpTime);
             }
-            
+
             // Clamp rotation
-            Vector3 turrenEulerAngles = turretPivot.rotation.eulerAngles;
-            turrenEulerAngles.x = (turrenEulerAngles.x < 360 - maxPitchAngle && turrenEulerAngles.x > 180) ? 360 - maxPitchAngle : turrenEulerAngles.x;
-            turretPivot.rotation = Quaternion.Euler(turrenEulerAngles);
+            
         }
 
         public void LowerTurretPivot()
         {
             if (turretPivot.eulerAngles.x <= Mathf.Abs(minPitchAngle) || turretPivot.eulerAngles.x > 180)
             {
-                 // Calculate target rotation based on the angle
-                 float xRotation = turretPivot.eulerAngles.x + (pitchSpeed * Time.deltaTime);
-                 cannonPivotRotation = Quaternion.Euler(xRotation, turretPivot.eulerAngles.y, turretPivot.eulerAngles.z);
+                // Calculate target rotation based on the angle
+                float xRotation = turretPivot.eulerAngles.x + (pitchSpeed * Time.deltaTime);
+                cannonPivotRotation = Quaternion.Euler(xRotation, turretPivot.eulerAngles.y, turretPivot.eulerAngles.z);
 
-                 // Smoothly interpolate to the target rotation
-                 turretPivot.rotation = Quaternion.Slerp(turretPivot.rotation, cannonPivotRotation, rotationLerpTime);
+                // Smoothly interpolate to the target rotation
+                turretPivot.rotation = Quaternion.Slerp(turretPivot.rotation, cannonPivotRotation, rotationLerpTime);
             }
-            
+
             // Clamp rotation
             Vector3 turrenEulerAngles = turretPivot.rotation.eulerAngles;
-            turrenEulerAngles.x = (turrenEulerAngles.x > Mathf.Abs(minPitchAngle) && turrenEulerAngles.x < 180) ? Mathf.Abs(minPitchAngle) : turrenEulerAngles.x;
+            turrenEulerAngles.x = (turrenEulerAngles.x > Mathf.Abs(minPitchAngle) && turrenEulerAngles.x < 180)
+                ? Mathf.Abs(minPitchAngle)
+                : turrenEulerAngles.x;
             turretPivot.rotation = Quaternion.Euler(turrenEulerAngles);
         }
 
+        public Transform GetLaunchPoint()
+        {
+            return launchPoint;
+        }
+        
         private void SetTurretToFixedRotation()
         {
             // turretPivot.Rotate(-25, 0, 0);
-            
+
             //turretPivot.RotateAround(turretPivot.localPosition, Vector3.right, -25);
-            
-            
+
+
             // var rot = Quaternion.Euler(FixedTurretRotation, 0, 0);
             //
             // turretPivot.SetPositionAndRotation(turretPivot.transform.localPosition, rot);
@@ -208,5 +267,5 @@ namespace TurboTowers.Turrets.Movement
         {
             isHorizontalRotationActive = true;
         }
-    }    
+    }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using TurboTowers.Turrets.Controls;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +15,7 @@ namespace TurboTowers.SceneManagement
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                //DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -24,13 +26,37 @@ namespace TurboTowers.SceneManagement
         public void LoadNextLevel()
         {
             var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadScene(++currentSceneIndex);
+            if (currentSceneIndex + 1 > SceneManager.sceneCountInBuildSettings - 1)
+            {
+                StartCoroutine(LoadScene(0));
+            }
+            else
+            {
+                StartCoroutine(LoadScene(++currentSceneIndex));
+            }
         }
-        
+
+        public void ReloadScene()
+        {
+            StartCoroutine(LoadScene(SceneManager.GetActiveScene().buildIndex));
+        }
+
         public void GotoMainMenu()
         {
-            SceneManager.LoadScene(0);
+            StartCoroutine(LoadScene(0));
         }
-    }   
+        
+        IEnumerator LoadScene(int sceneIndex)
+        {
+            GameObject.FindWithTag("Player").GetComponent<PlayerController>().SetTouchControlEnabled(false);
+            yield return null;
+            
+            yield return SceneManager.LoadSceneAsync(sceneIndex);
+            
+            GameObject.FindWithTag("Player").GetComponent<PlayerController>().SetTouchControlEnabled(true);
+            //newController.enabled = false;
+            yield return null;
+            //newController.enabled = true;
+        }
+    }
 }
-

@@ -12,8 +12,8 @@ namespace TurboTowers.Turrets.Combat
     [RequireComponent(typeof(Health))]
     public class PlayerAttacker : MonoBehaviour
     {
+        // Cached refs:
         [SerializeField] private HoldClickableButton powerBtn;
-
         [SerializeField] private Slider powerSlider;
         [SerializeField] private float powerupSpeed = 0.1f;
         [SerializeField] private float powerdownSpeed = 0.3f;
@@ -21,12 +21,16 @@ namespace TurboTowers.Turrets.Combat
         [SerializeField] private Projectile projectile;
         [SerializeField] private TrajectoryLine trajectoryLine;
         [SerializeField] private float cooldownTime = 1f;
+        [Tooltip("For third input style")]
+        [SerializeField] private float shootingVelocity = 10f;
 
         private bool isPoweringUp = false;
         private bool isAvailableToFire = true;
         private Scene testScene;
         private Health health;
+        private bool isCooledDown;
         private float cooldownCounter = 0;
+        private GameObject parentColliderGO;    // the nearest parent with the collider to be aware of when the projectile is fired
 
         // private InputSwitchHandler inputSwitchHandler;
         private InputStyle inputStyle = InputStyle.First;
@@ -35,10 +39,13 @@ namespace TurboTowers.Turrets.Combat
 
         public event Action OnTurretPowering;
         public event Action OnTurretFired;
+        public event Action OnShootingEnabled; 
 
-        public Action<int, PointType> OnTurretHit;
+        public Action<int, PointType, BodyPartType?> OnTurretHit;
 
         #endregion
+
+        #region Unity Events
 
         private void Awake()
         {
@@ -74,28 +81,32 @@ namespace TurboTowers.Turrets.Combat
 
         private void Start()
         {
-            testScene = SceneManager.CreateScene("TestScene");
+            inputStyle = GetComponent<PlayerController>().inputStyle;
+            parentColliderGO = GetComponentInParent<Collider>()?.gameObject;
             powerSlider.maxValue = powerBtn.HoldDuration;
             OnTurretHit = HandleHit;
-            cooldownCounter = 0;
+            isCooledDown = true;
+            OnShootingEnabled?.Invoke();
         }
 
         private void Update()
         {
-            if (inputStyle != InputStyle.First) return;
+            if (inputStyle == InputStyle.Second) return;
 
-            cooldownCounter += Time.deltaTime;
-
-            if (isAvailableToFire && isPoweringUp)
+            if (isCooledDown && isPoweringUp)
             {
                 PowerUpHandler();
             }
         }
 
+        #endregion
+
         private void SetInputStyle(InputStyle inputStyle)
         {
             this.inputStyle = inputStyle;
         }
+
+        #region Powering Up and Firing
 
         private void PowerUpStartHandler()
         {
@@ -116,7 +127,7 @@ namespace TurboTowers.Turrets.Combat
 
         private void PowerClickedUpHandler()
         {
-            if (cooldownCounter < cooldownTime) return;
+            if (!isCooledDown) return;
 
             if (powerBtn.ElapsedTime < powerBtn.MinPressDuration)
             {
@@ -134,26 +145,61 @@ namespace TurboTowers.Turrets.Combat
             isPoweringUp = true;
         }
 
-        private void Fire()
+        public void Fire()
         {
-            isPoweringUp = false;
-            cooldownCounter = 0;
+            if (!isCooledDown) return;
+            
+            StartCoroutine(HandleCooldown());
+            if (inputStyle != InputStyle.Fourth)
+            {
+                isPoweringUp = false;
+                cooldownCounter = 0;
 
-            trajectoryLine.RemoveTrajectoryLine();
+                trajectoryLine.RemoveTrajectoryLine();
 
-            var projectile =
-                Instantiate(this.projectile, turretExit.transform.position,
-                    Quaternion.identity);
+                var projectile =
+                    Instantiate(this.projectile, turretExit.transform.position,
+                        Quaternion.identity);
 
-            projectile.Fire(turretExit.forward,
-                powerSlider.value / powerSlider.maxValue,
-                GetComponent<Health>(), OnTurretHit);
-            powerSlider.value = 0;
+                projectile.Fire(turretExit.forward,
+                    powerSlider.value / powerSlider.maxValue,
+                    GetComponent<Health>(), OnTurretHit, parentColliderGO);
+                powerSlider.value = 0;
 
-            OnTurretFired?.Invoke();
+                OnTurretFired?.Invoke();    
+            }
+            else if (inputStyle == InputStyle.Fourth)
+            {
+                if (isCooledDown) return;
+                StartCoroutine(HandleCooldown());
+                var projectile =
+                    Instantiate(this.projectile, turretExit.transform.position,
+                        Quaternion.identity);
+
+                projectile.Fire(turretExit.forward,
+                    shootingVelocity,
+                    GetComponent<Health>(), OnTurretHit, parentColliderGO);
+                OnTurretFired?.Invoke();
+            }
         }
 
-        private void HandleHit(int damagePerformed, PointType hittedType)
+        IEnumerator HandleCooldown()
+        {
+            isCooledDown = false;
+            float counter = 0;
+            
+            while (counter < cooldownTime)
+            {
+                counter += Time.deltaTime;
+                yield return null;
+            }
+            
+            isCooledDown = true;
+            
+            OnShootingEnabled?.Invoke();
+        }
+        
+        private void HandleHit(int damagePerformed, PointType hittedType, BodyPartType? bodyPartType)
         {
             switch (hittedType)
             {
@@ -162,6 +208,9 @@ namespace TurboTowers.Turrets.Combat
                     break;
             }
         }
+        #endregion
+
+        #region Gizmos
 
         private void OnDrawGizmos()
         {
@@ -169,5 +218,36 @@ namespace TurboTowers.Turrets.Combat
             Gizmos.DrawWireSphere(turretExit.position, 55f);
             Gizmos.DrawLine(turretExit.position, turretExit.position + turretExit.up * 55f);
         }
+
+        #endregion
+
+        #region Getter Methods
+
+        public Projectile GetProjectile()
+        {
+            return projectile;
+        }
+        
+        public Vector3 GetShootingVelocity()
+        {
+            return turretExit.forward * shootingVelocity;
+        }
+        
+        public float GetShootingVelocityMagnitude()
+        {
+            return shootingVelocity;
+        }
+        
+        public Vector3 GetTurretExitPosition()
+        {
+            return turretExit.position;
+        }
+        
+        public float GetCooldownTime()
+        {
+            return cooldownTime;
+        }
+
+        #endregion
     }
 }

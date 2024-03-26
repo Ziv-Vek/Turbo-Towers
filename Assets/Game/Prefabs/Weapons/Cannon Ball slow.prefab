@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 5694548273610794584}
   - component: {fileID: 2392546921861959902}
   - component: {fileID: -2667115817964061747}
-  m_Layer: 0
-  m_Name: Projectile
+  m_Layer: 8
+  m_Name: Cannon Ball slow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,10 +148,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df47fc8c0e5cb25428cb4480973b94fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firePowerMultiplier: 50
+  firePowerMultiplier: 1
   lifeTime: 13
   baseDamage: 1
   groundHitEffect: {fileID: 7902972887336029051}
+  rb: {fileID: 5694548273610794584}
 --- !u!114 &-2667115817964061747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,10 +175,35 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5694548273610794564}
     m_Modifications:
+    - target: {fileID: 3967046463916128237, guid: 59b96a909a427f94c89c8555d4052abb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3967046463916289715, guid: 59b96a909a427f94c89c8555d4052abb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3967046463916293765, guid: 59b96a909a427f94c89c8555d4052abb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3967046463916299661, guid: 59b96a909a427f94c89c8555d4052abb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3967046463916313133, guid: 59b96a909a427f94c89c8555d4052abb,
         type: 3}
       propertyPath: m_Name
       value: GrenadeExplosionFire
+      objectReference: {fileID: 0}
+    - target: {fileID: 3967046463916313133, guid: 59b96a909a427f94c89c8555d4052abb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3967046463916566003, guid: 59b96a909a427f94c89c8555d4052abb,
         type: 3}

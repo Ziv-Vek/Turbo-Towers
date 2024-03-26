@@ -25,6 +25,8 @@ namespace TurboTowers.Turrets.Movement
           private bool isChangingPower = false;
           private bool isCanFire = true;
           private Scene testScene;
+          private GameObject parentColliderGO;    // the nearest parent with the collider to be aware of when the projectile is fired
+
 
           // private InputSwitchHandler inputSwitchHandler;
           private InputStyle inputStyle = InputStyle.First;
@@ -33,7 +35,7 @@ namespace TurboTowers.Turrets.Movement
           public event Action OnTurretPowering;
           public event Action OnTurretFired;
           
-          public Action<int, PointType> OnTurretHit;
+          public Action<int, PointType, BodyPartType?> OnTurretHit;
 
           #endregion
           
@@ -63,6 +65,8 @@ namespace TurboTowers.Turrets.Movement
           
           private void Start()
           {
+               parentColliderGO = GetComponentInParent<Collider>()?.gameObject;
+
                powerSlider.maxValue = maxHoldDuration;
                OnTurretHit = HandleHit;
           }
@@ -157,7 +161,7 @@ namespace TurboTowers.Turrets.Movement
                projectile.Fire(turretExit.up,
                     powerSlider.value / powerSlider.maxValue,
                     GetComponent<Health>(),
-                    OnTurretHit);
+                    OnTurretHit, parentColliderGO);
                powerSlider.value = 0;
                trajectoryLine.RemoveTrajectoryLine();
 
@@ -170,7 +174,7 @@ namespace TurboTowers.Turrets.Movement
                isCanFire = true;
           }
           
-          private void HandleHit(int damagePerformed, PointType type)
+          private void HandleHit(int damagePerformed, PointType type, BodyPartType? bodyPartType)
           {
                Debug.Log("turret hit with damage: " + damagePerformed);
           }

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 742e18aabb342c14b8d489f4fc118eec, type: 3}
   m_Name: CameraConfig
   m_EditorClassIdentifier: 
-  baseOffsetFromPlayer: {x: 0, y: 0, z: 0}
-  baseRotation: {x: 0, y: 0, z: 0, w: 0}
-  fixedHighDifference: 0
+  baseOffsetFromPlayer: {x: 4.05, y: 30.07301, z: -41.180004}
+  baseRotation: {x: -0, y: -0, z: -0, w: 1}
+  fixedHighDifference: 19.93301

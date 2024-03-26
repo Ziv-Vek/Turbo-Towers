@@ -66,6 +66,8 @@ MonoBehaviour:
   dissolveTime: 3
   baseHealth: 3
   currentHealth: 3
+  isInvinsible: 0
+  myType: 0
   OnHealthGain:
     m_PersistentCalls:
       m_Calls:
@@ -183,9 +185,10 @@ MonoBehaviour:
         Head","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"My
         Turret Pivot","IsShared":true,"TransformmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Projectile
         Spawn Point","IsShared":true,"TransformmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Projectile
-        Prefab","IsShared":true,"GameObjectmValue":3},{"Type":"BehaviorDesigner.Runtime.SharedHealth","Name":"My
-        Health","IsShared":true,"HealthmValue":4},{"Type":"BehaviorDesigner.Runtime.SharedWeaponStatsSO","Name":"Weapon
-        Stats","IsShared":true,"WeaponStatsSOmValue":5}]}'
+        Prefab","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedHealth","Name":"My
+        Health","IsShared":true,"HealthmValue":3},{"Type":"BehaviorDesigner.Runtime.SharedWeaponStatsSO","Name":"Weapon
+        Stats","IsShared":true,"WeaponStatsSOmValue":4},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Head
+        GO","IsShared":true}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -195,7 +198,6 @@ MonoBehaviour:
         - {fileID: 5591868970672498175}
         - {fileID: 3326178131483390860}
         - {fileID: 3494185051985690237}
-        - {fileID: 5694548273610794585, guid: 1be46dfb9fdfd0a41b5ebbc612dd48c0, type: 3}
         - {fileID: -7713379831807869329}
         - {fileID: 11400000, guid: 4f0f7ac6d34848a4fa5f07e82e204e2a, type: 2}
         byteData: 

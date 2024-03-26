@@ -19,6 +19,7 @@ namespace TurboTowers.Turrets.Common
         [SerializeField] private bool isInvinsible = false;
 
         [SerializeField] private PointType myType;
+        private HpBanner hpBanner;
         
         //State:
         private bool isAlive = true;
@@ -42,8 +43,19 @@ namespace TurboTowers.Turrets.Common
             {
                 UnityEngine.Debug.Log("Invinsible mode is on for " + gameObject.name + "!");
             }
+
+            hpBanner = gameObject.GetComponentInChildren<HpBanner>();
+            UpdateHpBanner();
         }
-    
+
+        private void UpdateHpBanner()
+        {
+            if (hpBanner != null)
+            {
+                hpBanner.SetCurrentHealth(currentHealth);
+            }
+        }
+
         public int GetInitialHealth()
         {
             return baseHealth;
@@ -55,6 +67,8 @@ namespace TurboTowers.Turrets.Common
             
             OnHealthLoss?.Invoke();
             currentHealth -= damage;
+            
+            UpdateHpBanner();
         
             if (currentHealth <= 0)
             {
@@ -74,6 +88,9 @@ namespace TurboTowers.Turrets.Common
             OnHealthGain?.Invoke();
             onHealthGained?.Invoke(health);
             
+            UpdateHpBanner();
+            
+            
             //TODO: to do test
         }
         
@@ -85,6 +102,9 @@ namespace TurboTowers.Turrets.Common
         private void Die()
         {
             isAlive = false;
+            
+            if (MapManager.Instance) MapManager.Instance.UnRegisterPoint(this);
+            
             OnTotalDeath?.Invoke();
             OnDeath?.Invoke();
         }

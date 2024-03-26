@@ -16,7 +16,7 @@ PrefabInstance:
     - target: {fileID: 72254015894784765, guid: 7002702c982c68d4082874e81d1b16df,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8876902647105496811, guid: 7002702c982c68d4082874e81d1b16df,
         type: 3}
@@ -171,17 +171,17 @@ PrefabInstance:
     - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.75
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.09
+      value: 8.16
       objectReference: {fileID: 0}
     - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.7677078
+      value: -2.29
       objectReference: {fileID: 0}
     - target: {fileID: 3207057371291390953, guid: f87dd30049bb5a541b156bae6a77ac27,
         type: 3}
@@ -454,10 +454,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputStyle: 0
-  touchDragDeadZone: 13
+  touchDragDeadZone: 18
   minAngleToPowerup: 60
   maxAngleToRotate: 65
-  minVerticalDelta: 5
+  minVerticalDelta: 10
+  isReversePitch: 1
 --- !u!114 &-5581364855778095048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,12 +472,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turretHead: {fileID: 7824908940509421695}
-  rotationSpeed: 65
+  rotationSpeed: 40
   turretPivot: {fileID: 1091299829874456076}
-  pitchSpeed: 220
+  pitchSpeed: 100
   maxPitchAngle: 60
   minPitchAngle: -45
   powerBtn: {fileID: 0}
+  launchPoint: {fileID: 1256557898280418301}
   isSmoothImplemented: 0
   smoothTime: 1
   isLerpImplemented: 1
@@ -495,13 +497,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerBtn: {fileID: 0}
   powerSlider: {fileID: 0}
-  powerupSpeed: 0.1
+  powerupSpeed: 4
   powerdownSpeed: 0.3
   turretExit: {fileID: 1256557898280418301}
-  projectile: {fileID: 2392546921861959902, guid: 1be46dfb9fdfd0a41b5ebbc612dd48c0,
+  projectile: {fileID: 2392546921861959902, guid: 72a02031f09d7384fa2f9af8a9894bbc,
     type: 3}
   trajectoryLine: {fileID: 5016143254431372509}
-  cooldownTime: 1
+  cooldownTime: 0.7
+  shootingVelocity: 50
 --- !u!114 &5016143254431372509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,7 +528,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 976198810797479534}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc64cc13bdf42b69466102c9c6aa1c8, type: 3}
   m_Name: 
@@ -535,7 +538,7 @@ MonoBehaviour:
   cooldownTime: 0.5
   powerChangeSpeed: 0.1
   turretExit: {fileID: 1256557898280418301}
-  projectile: {fileID: 2392546921861959902, guid: 1be46dfb9fdfd0a41b5ebbc612dd48c0,
+  projectile: {fileID: 2392546921861959902, guid: 72a02031f09d7384fa2f9af8a9894bbc,
     type: 3}
   trajectoryLine: {fileID: 5016143254431372509}
 --- !u!114 &1980579751275215948
@@ -545,7 +548,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 976198810797479534}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0b90b40f48778842bc29b9ffa8165c7, type: 3}
   m_Name: 
@@ -623,7 +626,7 @@ PrefabInstance:
     - target: {fileID: 4438841966350640052, guid: b5af3884e7662414a9721b5ee9a94aab,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5461671689006256096, guid: b5af3884e7662414a9721b5ee9a94aab,
         type: 3}
@@ -708,7 +711,7 @@ PrefabInstance:
     - target: {fileID: 3873386260508783111, guid: bf95dfab6fd856c4e9f4c4605aae0b9d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4420262966206391770, guid: bf95dfab6fd856c4e9f4c4605aae0b9d,
         type: 3}

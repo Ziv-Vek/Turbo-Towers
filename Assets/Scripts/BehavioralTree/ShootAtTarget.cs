@@ -20,13 +20,15 @@ public class ShootAtTarget : Action
     public SharedHealth myHealth;
     public SharedFloat firingPowerMagnitude = 5f;
 
+    public SharedGameObject parentColliderGO;   // the nearest parent with the collider to be aware of when the projectile is fired    
+    
     private bool isAvailableToFire;
     
     #region Events
     public event System.Action OnTurretPowering;
     public event System.Action OnTurretFired;
           
-    public System.Action<int, PointType> OnTurretHit;
+    public System.Action<int, PointType, BodyPartType?> OnTurretHit;
     #endregion
     
     public override void OnStart()
@@ -48,12 +50,12 @@ public class ShootAtTarget : Action
         projectile.GetComponent<Projectile>().Fire(projectileSpawnPoint.Value.forward,
             firingPowerMagnitude.Value,
             myHealth.Value,
-            OnTurretHit);
+            OnTurretHit, parentColliderGO.Value);
         
         return TaskStatus.Success;
     }
     
-    private void HandleHit(int damagePerformed, PointType pointType)
+    private void HandleHit(int damagePerformed, PointType pointType, BodyPartType? bodyPartType)
     {
         if (pointType == PointType.Enemy)
         {

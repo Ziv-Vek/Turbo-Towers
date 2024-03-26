@@ -6,7 +6,7 @@ using UnityEngine;
 public interface IDamageable
 {
     public Health GetTurretHealth();
-    public void HandleHit(int damage, Action<int, PointType> onHit);
+    public void HandleHit(int damage, Action<int, PointType, BodyPartType?> onHit);
     public Quaternion GetRotation();
     public Vector3 GetPosition();
 }

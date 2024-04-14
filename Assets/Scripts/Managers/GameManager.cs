@@ -27,7 +27,7 @@ namespace TurboTowers.Core
         private void Start()
         {
             SetGameState(initialLevelState);
-            
+
             //TODO: remove previous line
 
 /*#if UNITY_EDITOR
@@ -50,7 +50,6 @@ namespace TurboTowers.Core
                 case GameState.InGameBoss:
                     break;
                 case GameState.Victory:
-                    Debug.Log("Victory!");
                     HandleVictory();
                     break;
                 case GameState.Defeat:
@@ -71,6 +70,7 @@ namespace TurboTowers.Core
 
         private void HandleDefeat()
         {
+            Debug.Log("Victory!");
         }
 
         private void HandleVictory()
@@ -81,7 +81,7 @@ namespace TurboTowers.Core
         {
             SetGameState(GameState.InGame);
         }
-        
+
         public void HandleAllTowersKilled()
         {
             if (levelType == LevelType.KillAllTowers)
@@ -101,7 +101,7 @@ namespace TurboTowers.Core
         InGameCutscene,
         Null
     }
-    
+
     public enum LevelType
     {
         KillAllTowers,

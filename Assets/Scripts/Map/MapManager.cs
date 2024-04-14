@@ -105,8 +105,6 @@ namespace TurboTowers.Map
                 OnBossDeath?.Invoke();
             }
         }
-        
-        
 
         /** Checks if there are any remaining towers (enemies) in the map (boss inclusive).
          * Returns - true if at least one enemy is alive, otherwise returns false */
@@ -115,6 +113,8 @@ namespace TurboTowers.Map
             Dictionary<Health, TowerPoint>.ValueCollection pointsValues = targetTowers.Values;
             foreach (var towerPoint in pointsValues)
             {
+                Debug.Log("in loop");
+                Debug.Log(towerPoint.Type);
                 if (towerPoint.Type == PointType.Enemy) return true;
             }
             
